@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Future Builders Platform MVP</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter for a clean look -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0D1117; /* Deep dark blue/black */
+            color: #C9D1D9; /* Light grey text */
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        .container {
+            max-width: 1000px;
+        }
+        /* Primary color palette - Blue to Green Gradient */
+        .primary-gradient-bg {
+            background: linear-gradient(90deg, #58A6FF, #2EA043);
+        }
+        .primary-text-color {
+            color: #58A6FF; /* Electric Blue */
+        }
+        .secondary-text-color {
+            color: #2EA043; /* Forest Green */
+        }
+        /* Card styling */
+        .app-card {
+            background-color: #161B22; /* Slightly lighter dark background */
+            border-radius: 1rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, border-color 0.3s ease-in-out;
+            border: 1px solid #30363D; /* Subtle border */
+            position: relative; /* For glow effect */
+            overflow: hidden; /* For glow effect */
+        }
+        .app-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(88, 166, 255, 0.1), transparent 70%);
+            border-radius: 50%;
+            transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+            opacity: 0;
+            z-index: 0;
+            transform: scale(0);
+        }
+        .app-card:hover::before {
+            opacity: 1;
+            transform: scale(1);
+        }
+        .app-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+            border-color: #58A6FF; /* Highlight border on hover */
+        }
+        /* Button styling */
+        .app-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 24px;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out, opacity 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            position: relative; /* For pseudo-elements */
+            overflow: hidden; /* For pseudo-elements */
+        }
+        .app-btn-primary {
+            @apply primary-gradient-bg text-white;
+        }
+        .app-btn-primary:hover {
+            opacity: 0.9;
+            transform: translateY(-1px) scale(1.02); /* Added scale effect */
+            box-shadow: 0 4px 12px rgba(88, 166, 255, 0.4); /* Glow effect */
+        }
+        .app-btn-outline {
+            @apply border border-gray-600 text-gray-300 bg-transparent;
+        }
+        .app-btn-outline:hover {
+            @apply bg-gray-700 text-white;
+            transform: translateY(-1px) scale(1.02); /* Added scale effect */
+            box-shadow: 0 4px 12px rgba(46, 160, 67, 0.4); /* Subtle glow */
+        }
+        /* Button shimmer effect on hover */
+        .app-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: all 0.7s ease-in-out;
+            z-index: 1;
+        }
+        .app-btn:hover::before {
+            left: 100%;
+        }
+        .app-btn span {
+            position: relative;
+            z-index: 2;
+        }
+
+
+        /* Modal styles */
+        .modal {
+            display: flex; /* Changed to flex for centering */
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.8); /* Darker overlay */
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+        }
+        .modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            background-color: #161B22; /* Dark background */
+            padding: 30px;
+            border-radius: 1rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+            width: 90%;
+            max-width: 500px;
+            text-align: right;
+            border: 1px solid #30363D;
+            color: #C9D1D9;
+            transform: translateY(20px) scale(0.95); /* Initial state for animation */
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+        .modal.show .modal-content {
+            transform: translateY(0) scale(1); /* Final state for animation */
+        }
+        .close-button {
+            color: #8B949E;
+            float: left;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close-button:hover,
+        .close-button:focus {
+            color: #58A6FF;
+            text-decoration: none;
+        }
+        /* Input fields */
+        .app-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #30363D; /* Darker border */
+            border-radius: 0.5rem;
+            background-color: #0D1117 !important; /* Explicitly dark background */
+            color: #C9D1D9 !important; /* Light text */
+            outline: none;
+            box-shadow: none;
+            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            cursor: text !important; /* Ensure text cursor */
+            position: relative; /* Ensure z-index works */
+            z-index: 1; /* Place above other elements within the card if needed */
+        }
+        .app-input::placeholder {
+            color: #8B949E; /* Placeholder color */
+        }
+        .app-input:focus {
+            border-color: #58A6FF; /* Blue focus ring */
+            box-shadow: 0 0 0 2px rgba(88, 166, 255, 0.3); /* Subtle glow on focus */
+        }
+        .app-textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #30363D; /* Darker border */
+            border-radius: 0.5rem;
+            background-color: #0D1117 !important; /* Explicitly dark background */
+            color: #C9D1D9 !important; /* Light text */
+            outline: none;
+            box-shadow: none;
+            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            cursor: text !important; /* Ensure text cursor */
+            position: relative; /* Ensure z-index works */
+            z-index: 1; /* Place above other elements within the card if needed */
+        }
+        .app-textarea::placeholder {
+            color: #8B949E; /* Placeholder color */
+        }
+        .app-textarea:focus {
+            border-color: #58A6FF; /* Blue focus ring */
+            box-shadow: 0 0 0 2px rgba(88, 166, 255, 0.3); /* Subtle glow on focus */
+        }
+
+        /* Spinner */
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            border-top: 4px solid #58A6FF;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Toast Notification */
+        #toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1002;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .toast {
+            background-color: #161B22;
+            color: #C9D1D9;
+            padding: 15px 20px;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            border: 1px solid #30363D;
+            opacity: 0;
+            transform: translateX(100%);
+            animation: slideIn 0.5s forwards, fadeOut 0.5s 2.5s forwards;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0D1117; /* Dark track */
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #30363D; /* Darker thumb */
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #58A6FF; /* Blue on hover */
+        }
+
+        /* Hero Section Particle Background (Canvas) */
+        #hero-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2; /* Behind hero-background and overlay */
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container"></div>
+
+    <!-- Initial Welcome/MVP Disclaimer Modal -->
+    <div id="welcomeModal" class="modal">
+        <div class="modal-content text-center">
+            <h3 class="text-3xl font-bold primary-text-color mb-4">أهلاً بك في Future Builders Platform!</h3>
+            <p class="text-gray-300 mb-6">
+                هذا نموذج أولي (MVP) للمنصة، يعرض بعض الميزات الأساسية والتفاعلية. نعمل جاهدين لتطويرها لتكون منصة متكاملة ومبهرة.
+            </p>
+            <p class="text-gray-400 text-sm">
+                (البيانات المدخلة في هذا النموذج الأولي غير دائمة وستختفي عند تحديث الصفحة.)
+            </p>
+            <button class="app-btn app-btn-primary mt-6" onclick="closeModal('welcomeModal')">
+                <span>ابدأ الاستكشاف</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="bg-[#161B22] shadow-lg py-4 px-6 fixed top-0 left-0 right-0 z-50 border-b border-gray-700">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold primary-text-color">Future Builders Platform</h1>
+            <nav>
+                <ul class="flex space-x-4 space-x-reverse">
+                    <li><a href="#user-account" class="text-gray-300 hover:text-blue-400 font-medium">حسابي</a></li>
+                    <li><a href="#community-discussion" class="text-gray-300 hover:text-blue-400 font-medium">النقاش</a></li>
+                    <li><a href="#core-pillars" class="text-gray-300 hover:text-blue-400 font-medium">محاورنا الأساسية</a></li>
+                    <li><a href="#project-showcase" class="text-gray-300 hover:text-blue-400 font-medium">المشاريع</a></li>
+                    <li><a href="#innovation-lab" class="text-gray-300 hover:text-blue-400 font-medium">مختبر الابتكار</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="pt-24 pb-10 px-6">
+        <div class="container mx-auto space-y-12">
+
+            <!-- Welcome Section -->
+            <section class="text-center py-12">
+                <h2 class="text-5xl font-extrabold primary-text-color mb-4">أهلاً بك في Future Builders Platform!</h2>
+                <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+                    هذا نموذج أولي (MVP) لمنصة بناء المستقبل. استكشف ميزاتنا الأساسية وشارك في بناء مجتمعنا.
+                </p>
+            </section>
+
+            <!-- User Account Section -->
+            <section id="user-account" class="app-card p-8">
+                <h3 class="text-3xl font-bold primary-text-color mb-6">حساب المستخدم</h3>
+                <div class="flex items-center justify-between mb-4">
+                    <p id="welcomeMessage" class="text-lg text-gray-300">أهلاً بك، ضيف!</p>
+                    <button id="authButton" class="app-btn app-btn-primary" onclick="openModal('authModal')">
+                        <i class="fas fa-user-circle ml-2"></i> تسجيل الدخول / التسجيل
+                    </button>
+                </div>
+            </section>
+
+            <!-- Community Discussion Section -->
+            <section id="community-discussion" class="app-card p-8">
+                <h3 class="text-3xl font-bold primary-text-color mb-6">مساحة النقاش المجتمعي</h3>
+                <div id="discussionMessages" class="bg-[#0D1117] p-4 rounded-lg border border-gray-700 max-h-80 overflow-y-auto mb-4 space-y-3">
+                    <!-- Default messages -->
+                    <div class="text-gray-300 text-sm">
+                        <strong class="text-blue-400">غدي:</strong> مرحباً بالجميع! متحمسة جداً لمشاركة أفكارنا هنا.
+                    </div>
+                    <div class="text-gray-300 text-sm">
+                        <strong class="text-green-400">محمد:</strong> أهلاً غدي! أتمنى أن تكون هذه المساحة مفيدة للجميع.
+                    </div>
+                    <div class="text-gray-300 text-sm">
+                        <strong class="text-gray-400">طالب 1:</strong> ما هي أفضل الموارد لتعلم الذكاء الاصطناعي للمبتدئين؟
+                    </div>
+                </div>
+                <textarea id="discussionInput" class="app-textarea mb-4" rows="3" placeholder="اكتب رسالتك هنا..."></textarea>
+                <button class="app-btn app-btn-primary" onclick="postDiscussionMessage()">
+                    <i class="fas fa-paper-plane ml-2"></i> نشر الرسالة
+                </button>
+            </section>
+
+            <!-- Core Pillars Section (New Main Section) -->
+            <section id="core-pillars" class="app-card p-8">
+                <h2 class="text-4xl font-bold primary-text-color mb-8 text-center">محاورنا الأساسية: التقنية، البودكاست، وإدارة المشاريع</h2>
+                <p class="text-gray-300 text-lg mb-10 text-center max-w-2xl mx-auto">
+                    نقدم محتوى متخصصًا وتفاعليًا في ركائزنا الأساسية لتمكينك من بناء المستقبل.
+                </p>
+
+                <!-- Tech: Learning Paths & Challenges -->
+                <div class="mb-10 p-6 bg-[#0D1117] rounded-lg border border-gray-700">
+                    <h3 class="text-3xl font-bold primary-text-color mb-6">التقنية: مسارات تعلم وتحديات</h3>
+                    <p class="text-gray-300 mb-6">تعلم مهارات برمجية وتقنية جديدة من خلال دروسنا التفاعلية وورش العمل التطبيقية، واستكشف مسارات تعلم مخصصة.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        <div class="bg-[#161B22] p-4 rounded-lg border border-gray-700">
+                            <h4 class="text-xl font-semibold text-blue-400 mb-2">أساسيات بايثون للمبتدئين</h4>
+                            <p class="text-gray-300 text-sm mb-2">تعلم أساسيات لغة بايثون، من المتغيرات إلى الدوال.</p>
+                            <p class="text-gray-400 text-xs">المقدم: محمد</p>
+                            <button class="app-btn app-btn-outline mt-4" onclick="openTechLessonModal('أساسيات بايثون', 'أهلاً بك في درس أساسيات بايثون! تخيل أنك الآن في محرر أكواد تفاعلي. اكتب print(\'مرحباً بالعالم!\') وشغل الكود!\n\n(هذا محرر أكواد وهمي، لا يقوم بتشغيل كود حقيقي.)', 'print(\'مرحباً بالعالم!\')')">
+                                <i class="fas fa-code ml-2"></i> ابدأ الدرس
+                            </button>
+                        </div>
+                        <div class="bg-[#161B22] p-4 rounded-lg border border-gray-700">
+                            <h4 class="text-xl font-semibold text-green-400 mb-2">مقدمة في الأمن السيبراني</h4>
+                            <p class="text-gray-300 text-sm mb-2">فهم التهديدات السيبرانية الشائعة وكيفية حماية بياناتك.</p>
+                            <p class="text-gray-400 text-xs">المقدم: محمد</p>
+                            <button class="app-btn app-btn-outline mt-4" onclick="openTechLessonModal('مقدمة في الأمن السيبراني', 'أهلاً بك في درس الأمن السيبراني! تخيل أنك في مختبر افتراضي تحاكي هجوماً إلكترونياً. ما هي أول خطوة لحماية نفسك؟\n\n(هذه محاكاة وهمية، لا تقوم بعمليات حقيقية.)')">
+                                <i class="fas fa-shield-alt ml-2"></i> ابدأ الدرس
+                            </button>
+                        </div>
+                    </div>
+                    <div class="bg-[#161B22] p-4 rounded-lg border border-gray-700 mt-4">
+                        <h4 class="text-xl font-semibold text-purple-400 mb-2">تحدي الأسبوع: بناء تطبيق قائمة مهام بسيط</h4>
+                        <p class="text-gray-300 text-sm mb-2">شارك في تحدينا الأسبوعي لتطبيق مهاراتك البرمجية وحل مشكلة عملية. سيتم الإعلان عن الفائزين وتقديم الحلول النموذجية.</p>
+                        <button class="app-btn app-btn-outline mt-4" onclick="openGenericModal(event, 'تحدي الأسبوع', 'انضم إلى تحدي الأسبوع البرمجي! تفاصيل التحدي ستكون متاحة قريباً في هذا القسم.')">
+                            <i class="fas fa-laptop-code ml-2"></i> انضم للتحدي
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Podcast: Inspiring Voices & Success Stories -->
+                <div class="mb-10 p-6 bg-[#0D1117] rounded-lg border border-gray-700">
+                    <h3 class="text-3xl font-bold primary-text-color mb-6">البودكاست: أصوات ملهمة وقصص نجاح</h3>
+                    <p class="text-gray-300 mb-6">استمع إلى أحدث حلقات البودكاست التي تستضيف مواهب ملهمة وتناقش قضايا تهم مجتمعنا الطلابي.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        <div class="bg-[#161B22] p-4 rounded-lg border border-gray-700">
+                            <h4 class="text-xl font-semibold text-blue-400 mb-2">الحلقة 1: رحلة رائد أعمال شاب</h4>
+                            <p class="text-gray-300 text-sm mb-2">مقابلة مع رائد أعمال ناجح حول تحديات بناء شركة ناشئة من الصفر.</p>
+                            <p class="text-gray-400 text-xs">المتحدث: غدي | الضيف: أحمد العلي</p>
+                            <button class="app-btn app-btn-outline mt-4" onclick="openPodcastPlayerModal('رحلة رائد أعمال شاب', 'هنا سيتم تشغيل الحلقة الأولى من البودكاست. تخيل أنك تستمع الآن إلى قصة ملهمة!')">
+                                <i class="fas fa-play ml-2"></i> تشغيل الحلقة
+                            </button>
+                        </div>
+                        <div class="bg-[#161B22] p-4 rounded-lg border border-gray-700">
+                            <h4 class="text-xl font-semibold text-green-400 mb-2">الحلقة 2: الذكاء الاصطناعي والمستقبل</h4>
+                            <p class="text-gray-300 text-sm mb-2">نقاش حول تأثير الذكاء الاصطناعي على حياتنا اليومية ومستقبل الوظائف.</p>
+                            <p class="text-gray-400 text-xs">المتحدث: محمد | الضيف: د. سارة خالد</p>
+                            <button class="app-btn app-btn-outline mt-4" onclick="openPodcastPlayerModal('الذكاء الاصطناعي والمستقبل', 'هنا سيتم تشغيل الحلقة الثانية من البودكاست. استعد لجرعة من المعرفة المستقبلية!')">
+                                <i class="fas fa-play ml-2"></i> تشغيل الحلقة
+                            </button>
+                        </div>
+                    </div>
+                    <div class="bg-[#161B22] p-4 rounded-lg border border-gray-700 mt-4">
+                        <h4 class="text-xl font-semibold text-purple-400 mb-2">تسليط الضوء على ضيف: قصة نجاح من NEOM</h4>
+                        <p class="text-gray-300 text-sm mb-2">مقابلة خاصة مع أحد المواهب البارزة من مجتمع نيوم، يشاركنا تجربته الملهمة في بناء المستقبل.</p>
+                        <button class="app-btn app-btn-outline mt-4" onclick="openGenericModal(event, 'تسليط الضوء على ضيف', 'استمع إلى قصة نجاح ملهمة من قلب نيوم! هذه الميزة قيد الإعداد.')">
+                            <i class="fas fa-star ml-2"></i> استمع للقصة
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Project Management: From Idea to Achievement -->
+                <div class="p-6 bg-[#0D1117] rounded-lg border border-gray-700">
+                    <h3 class="text-3xl font-bold primary-text-color mb-6">إدارة المشاريع: من الفكرة إلى الإنجاز</h3>
+                    <p class="text-gray-300 mb-6">
+                        بقيادة محمد وغدي، نؤمن بأن تحويل الأفكار المبتكرة إلى واقع ملموس يتطلب مهارات قوية في <span class="primary-text-color font-semibold">Project Management</span>. هذا القطاع يهدف إلى تمكين الطلاب بالأدوات والمنهجيات اللازمة لإدارة مشاريعهم بنجاح.
+                    </p>
+                    <p class="text-gray-300 text-lg mb-4">
+                        **ماذا نقدم في هذا القطاع:**
+                        <ul class="list-disc list-inside text-gray-300 text-lg pr-4">
+                            <li>**منهجيات PM:** شروحات مبسطة لمنهجيات <span class="secondary-text-color font-semibold">Agile, Scrum, Waterfall</span> وكيفية تطبيقها.</li>
+                            <li>**أدوات التخطيط والمتابعة:** استعراض لأدوات شائعة مثل <span class="secondary-text-color font-semibold">Trello, Asana, Jira</span>.</li>
+                            <li>**مسار احتضان الأفكار (<span class="secondary-text-color font-semibold">Idea Incubation Track</span>):** دليل خطوة بخطوة لمساعدتك في تحويل فكرتك إلى <span class="secondary-text-color font-semibold">MVP</span> قابل للتطبيق.</li>
+                            <li>**نصائح عملية:** إرشادات حول تحديد الأهداف، إدارة الموارد، حل المشكلات، والتواصل الفعال.</li>
+                            <li>**برنامج الإرشاد (<span class="secondary-text-color font-semibold">Mentorship Matching</span>):** ربط الطلاب بمرشدين متخصصين في إدارة المشاريع.</li>
+                        </ul>
+                    </p>
+                    <button class="app-btn app-btn-primary" onclick="openGenericModal(event, 'استكشف إدارة المشاريع', 'تعرف على أساسيات إدارة المشاريع، المنهجيات، والأدوات التي تساعدك على تحويل أفكارك إلى مشاريع ناجحة. محتوى هذا القسم قيد الإعداد!')">
+                        <span><i class="fas fa-tasks ml-2"></i> استكشف إدارة المشاريع</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Project Showcase Section -->
+            <section id="project-showcase" class="app-card p-8">
+                <h3 class="text-3xl font-bold primary-text-color mb-6">معرض المشاريع الطلابية</h3>
+                <div class="bg-[#0D1117] p-6 rounded-lg border border-gray-700 mb-8">
+                    <h4 class="text-2xl font-bold primary-text-color mb-4">أضف مشروعك الجديد</h4>
+                    <div class="mb-4">
+                        <input type="text" id="newProjectTitle" class="app-input" placeholder="عنوان المشروع">
+                    </div>
+                    <div class="mb-4">
+                        <textarea id="newProjectDescription" class="app-textarea" rows="3" placeholder="وصف المشروع"></textarea>
+                    </div>
+                    <div class="mb-4">
+                        <input type="text" id="newProjectAuthor" class="app-input" placeholder="اسم المؤلف">
+                    </div>
+                    <button class="app-btn app-btn-primary" onclick="addProject()">
+                        <i class="fas fa-plus-circle ml-2"></i> إضافة المشروع
+                    </button>
+                </div>
+
+                <div id="projectList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Default projects -->
+                    <div class="bg-[#0D1117] p-4 rounded-lg border border-gray-700">
+                        <h4 class="text-xl font-semibold text-blue-400 mb-2">مشروع: مساعد الذكاء الاصطناعي</h4>
+                        <p class="text-gray-300 text-sm">تطبيق ويب يستخدم تعلم الآلة لتحسين تجربة المستخدم.</p>
+                        <p class="text-gray-400 text-xs mt-2">بواسطة: فريق الابتكار</p>
+                    </div>
+                    <div class="bg-[#0D1117] p-4 rounded-lg border border-gray-700">
+                        <h4 class="text-xl font-semibold text-green-400 mb-2">تطبيق: إدارة المهام الذكية</h4>
+                        <p class="text-300 text-sm">تطبيق جوال يساعد الطلاب على تنظيم مهامهم اليومية بفعالية.</p>
+                        <p class="text-gray-400 text-xs mt-2">بواسطة: آمنة</p>
+                    </div>
+                    <div class="bg-[#0D1117] p-4 rounded-lg border border-gray-700">
+                        <h4 class="text-xl font-semibold text-blue-400 mb-2">موقع: دليل نيوم الثقافي</h4>
+                        <p class="text-gray-300 text-sm">منصة ويب تعرض الفعاليات والمعالم الثقافية في نيوم.</p>
+                        <p class="text-gray-400 text-xs mt-2">بواسطة: فريق الإبداع</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Innovation Lab Section -->
+            <section id="innovation-lab" class="app-card p-8">
+                <h3 class="text-3xl font-bold primary-text-color mb-6">مختبر الابتكار: العصف الذهني المدعوم بالذكاء الاصطناعي</h3>
+                <p class="text-gray-300 mb-6">
+                    أطلق العنان لإبداعك مع مساعد العصف الذهني المدعوم بالذكاء الاصطناعي. أدخل موضوعك، ودع ذكاءنا الاصطناعي يساعدك في توليد أفكار مبتكرة!
+                    <br><span class="text-sm text-gray-400">(هذه الميزة هي عرض توضيحي لقدرات الذكاء الاصطناعي، ولا تستدعي واجهة برمجية حقيقية حالياً.)</span>
+                </p>
+                <div class="flex flex-col items-center justify-center space-y-4">
+                    <textarea id="brainstormInput" class="app-textarea" rows="4" placeholder="أدخل موضوع أو فكرة العصف الذهني هنا..."></textarea>
+                    <button class="app-btn app-btn-primary" onclick="generateIdeas()">
+                        <i class="fas fa-magic ml-2"></i> توليد الأفكار
+                    </button>
+                    <div id="brainstormOutput" class="w-full p-4 mt-4 rounded-lg bg-[#0D1117] text-gray-300 border border-gray-700 text-right min-h-[100px] flex items-center justify-center">
+                        <span class="text-gray-500">ستظهر أفكارك هنا...</span>
+                    </div>
+                    <div id="loadingSpinner" class="hidden mt-4">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-[#161B22] py-8 px-6 text-center border-t border-gray-700">
+        <div class="container mx-auto">
+            <p class="text-gray-400">&copy; 2025 Future Builders Platform. جميع الحقوق محفوظة.</p>
+            <p class="text-gray-400 mt-2">بفخر من الطلاب.</p>
+        </div>
+    </footer>
+
+    <!-- Modals -->
+    <!-- Authentication Modal -->
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('authModal')">&times;</span>
+            <h3 class="text-2xl font-bold primary-text-color mb-4">تسجيل الدخول / التسجيل</h3>
+            <div class="mb-4">
+                <input type="text" id="usernameInput" class="app-input" placeholder="اسم المستخدم">
+            </div>
+            <div class="mb-6">
+                <input type="password" id="passwordInput" class="app-input" placeholder="كلمة المرور">
+            </div>
+            <button class="app-btn app-btn-primary w-full" onclick="handleAuth()">
+                <i class="fas fa-sign-in-alt ml-2"></i> دخول
+            </button>
+            <p class="text-gray-500 text-sm mt-4">
+                (هذا نموذج تسجيل دخول وهمي. لا يتم حفظ البيانات.)
+            </p>
+        </div>
+    </div>
+
+    <!-- Podcast Player Modal -->
+    <div id="podcastPlayerModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('podcastPlayerModal')">&times;</span>
+            <h3 id="podcastModalTitle" class="text-2xl font-bold primary-text-color mb-4">تشغيل البودكاست</h3>
+            <p id="podcastModalMessage" class="text-gray-300 mb-6">
+                هنا سيتم تشغيل الحلقة. تخيل أنك تستمع الآن إلى محتوى رائع!
+            </p>
+            <p class="text-gray-400 text-sm">
+                (هذه وظيفة وهمية. لا يتم تشغيل ملف صوتي حقيقي في هذا النموذج الأولي.)
+            </p>
+            <button class="app-btn app-btn-primary mt-6" onclick="closeModal('podcastPlayerModal')">
+                <span>إغلاق</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Tech Lesson Modal -->
+    <div id="techLessonModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('techLessonModal')">&times;</span>
+            <h3 id="techLessonModalTitle" class="text-2xl font-bold primary-text-color mb-4">درس تقني</h3>
+            <p id="techLessonModalMessage" class="text-gray-300 mb-6">
+                محتوى الدرس هنا. تخيل أنك تتفاعل مع محرر أكواد أو محاكاة!
+            </p>
+            <textarea id="mockCodeEditor" class="app-textarea hidden mb-4" rows="8" placeholder="اكتب الكود هنا..."></textarea>
+            <button id="runCodeBtn" class="app-btn app-btn-primary hidden mt-2" onclick="runMockCode()">
+                <i class="fas fa-play ml-2"></i> تشغيل الكود
+            </button>
+            <div id="mockCodeOutput" class="bg-[#0D1117] p-3 rounded-lg border border-gray-700 text-left text-gray-300 hidden mt-4"></div>
+            <button class="app-btn app-btn-primary mt-6" onclick="closeModal('techLessonModal')">
+                <span>إغلاق الدرس</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Generic "Coming Soon" Modal -->
+    <div id="genericModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('genericModal')">&times;</span>
+            <h3 id="modalTitle" class="text-2xl font-bold primary-text-color mb-4">الميزة قيد التطوير</h3>
+            <p id="modalMessage" class="text-gray-300 mb-6">
+                نحن نعمل جاهدين على إطلاق هذه الميزة قريباً! ترقبوا المزيد من المحتوى التفاعلي والوظائف المذهلة التي ستعزز تجربتكم في المنصة.
+            </p>
+            <button class="app-btn app-btn-primary mt-6" onclick="closeModal('genericModal')">
+                <span>حسناً، فهمت</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // --- Global State (Temporary for MVP) ---
+        let currentUser = 'ضيف'; // Default user
+
+        // --- Toast Notification Functions ---
+        function showToast(message, duration = 3000) {
+            const toastContainer = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            toastContainer.appendChild(toast);
+
+            setTimeout(() => {
+                toast.remove();
+            }, duration);
+        }
+
+        // --- Modal Functions ---
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.add('show');
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.remove('show');
+        }
+
+        function openGenericModal(event, title = 'الميزة قيد التطوير', message = 'نحن نعمل جاهدين على إطلاق هذه الميزة قريباً! ترقبوا المزيد من المحتوى التفاعلي والوظائف المذهلة التي ستعزز تجربتكم في المنصة.') {
+            if (event) event.preventDefault(); // Prevent default link behavior if called from a link
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalMessage').textContent = message;
+            openModal('genericModal');
+        }
+
+        function openPodcastPlayerModal(title, message) {
+            document.getElementById('podcastModalTitle').textContent = title;
+            document.getElementById('podcastModalMessage').textContent = message;
+            openModal('podcastPlayerModal');
+        }
+
+        function openTechLessonModal(title, message, mockCode = '') {
+            document.getElementById('techLessonModalTitle').textContent = title;
+            document.getElementById('techLessonModalMessage').textContent = message;
+            const mockCodeEditor = document.getElementById('mockCodeEditor');
+            const runCodeBtn = document.getElementById('runCodeBtn');
+            const mockCodeOutput = document.getElementById('mockCodeOutput');
+
+            if (mockCode) {
+                mockCodeEditor.value = mockCode;
+                mockCodeEditor.classList.remove('hidden');
+                runCodeBtn.classList.remove('hidden');
+                mockCodeOutput.classList.add('hidden'); // Hide output initially
+                mockCodeOutput.textContent = ''; // Clear previous output
+            } else {
+                mockCodeEditor.classList.add('hidden');
+                runCodeBtn.classList.add('hidden');
+                mockCodeOutput.classList.add('hidden');
+            }
+            openModal('techLessonModal');
+        }
+
+        function runMockCode() {
+            const code = document.getElementById('mockCodeEditor').value;
+            const output = document.getElementById('mockCodeOutput');
+            output.classList.remove('hidden');
+            output.textContent = `تم تشغيل الكود: \n${code}\n\nالناتج (وهمي): تم تنفيذ العملية بنجاح.`;
+            showToast('تم تشغيل الكود (وهمياً)!', 2000);
+        }
+
+
+        // Close modal if user clicks outside of it
+        window.onclick = function(event) {
+            // Check if the clicked element is a modal background
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('show');
+            }
+        }
+
+        // --- User Account Functions ---
+        function updateWelcomeMessage() {
+            document.getElementById('welcomeMessage').textContent = `أهلاً بك، ${currentUser}!`;
+            const authButton = document.getElementById('authButton');
+            if (currentUser !== 'ضيف') {
+                authButton.textContent = 'تسجيل الخروج';
+                authButton.onclick = handleLogout;
+            } else {
+                authButton.textContent = 'تسجيل الدخول / التسجيل';
+                authButton.onclick = () => openModal('authModal');
+            }
+        }
+
+        function handleAuth() {
+            const usernameInput = document.getElementById('usernameInput');
+            const passwordInput = document.getElementById('passwordInput');
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value.trim();
+
+            if (username && password) {
+                currentUser = username; // Set current user (temporary)
+                updateWelcomeMessage();
+                closeModal('authModal');
+                showToast(`تم تسجيل الدخول بنجاح كـ ${username}`, 3000);
+                usernameInput.value = '';
+                passwordInput.value = '';
+            } else {
+                showToast('الرجاء إدخال اسم المستخدم وكلمة المرور.', 3000);
+            }
+        }
+
+        function handleLogout() {
+            currentUser = 'ضيف';
+            updateWelcomeMessage();
+            showToast('تم تسجيل الخروج بنجاح.', 3000);
+        }
+
+        // --- Discussion Board Functions ---
+        function postDiscussionMessage() {
+            const discussionInput = document.getElementById('discussionInput');
+            const discussionMessagesDiv = document.getElementById('discussionMessages');
+            const message = discussionInput.value.trim();
+
+            if (message) {
+                const newMessageDiv = document.createElement('div');
+                newMessageDiv.className = 'text-gray-300 text-sm';
+                newMessageDiv.innerHTML = `<strong class="text-blue-400">${currentUser}:</strong> ${message}`;
+                
+                discussionMessagesDiv.prepend(newMessageDiv); // Add to top
+                discussionInput.value = ''; // Clear input
+                discussionMessagesDiv.scrollTop = 0; // Scroll to top to see new message
+                showToast('تم نشر رسالتك!', 2000);
+            } else {
+                showToast('الرجاء كتابة رسالة لنشرها.', 2000);
+            }
+        }
+
+        // --- Project Showcase Functions ---
+        function addProject() {
+            const title = document.getElementById('newProjectTitle').value.trim();
+            const description = document.getElementById('newProjectDescription').value.trim();
+            const author = document.getElementById('newProjectAuthor').value.trim();
+            const projectListDiv = document.getElementById('projectList');
+
+            if (title && description && author) {
+                const newProjectDiv = document.createElement('div');
+                newProjectDiv.className = 'bg-[#0D1117] p-4 rounded-lg border border-gray-700';
+                newProjectDiv.innerHTML = `
+                    <h4 class="text-xl font-semibold text-blue-400 mb-2">مشروع: ${title}</h4>
+                    <p class="text-gray-300 text-sm">${description}</p>
+                    <p class="text-gray-400 text-xs mt-2">بواسطة: ${author}</p>
+                `;
+                projectListDiv.prepend(newProjectDiv); // Add to top
+
+                // Clear form fields
+                document.getElementById('newProjectTitle').value = '';
+                document.getElementById('newProjectDescription').value = '';
+                document.getElementById('newProjectAuthor').value = '';
+                showToast('تمت إضافة المشروع بنجاح!', 3000);
+            } else {
+                showToast('الرجاء تعبئة جميع حقول المشروع.', 3000);
+            }
+        }
+
+        // --- AI Brainstorming Function (Mock LLM Call) ---
+        async function generateIdeas() {
+            const input = document.getElementById('brainstormInput').value;
+            const output = document.getElementById('brainstormOutput');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+
+            if (!input.trim()) {
+                output.innerHTML = '<span class="text-red-400">الرجاء إدخال موضوع للعصف الذهني!</span>';
+                return;
+            }
+
+            output.innerHTML = ''; // Clear previous output
+            loadingSpinner.classList.remove('hidden'); // Show spinner
+
+            const mockResponses = [
+                "حلول مبتكرة للمعيشة الحضرية المستدامة: أنظمة ذكية لإدارة النفايات، مزارع عمودية، وشبكات طاقة متجددة.",
+                "مستقبل التعليم: معلمون شخصيون مدعومون بالذكاء الاصطناعي، منصات تعلم محفزة بالألعاب، وفصول دراسية غامرة بتقنية الواقع الافتراضي.",
+                "بناء المجتمع في المدن الذكية: منصات رقمية لمشاركة المواطنين، أسواق للمواهب المحلية، وبرامج تبادل ثقافي.",
+                "التقنية من أجل الصالح العام: أدوات مدعومة بالذكاء الاصطناعي لتسهيل الوصول، blockchain للجمعيات الخيرية الشفافة، وإنترنت الأشياء لمراقبة البيئة."
+            ];
+
+            try {
+                // Simulate network delay
+                await new Promise(resolve => setTimeout(resolve, 2000));
+
+                const randomIndex = Math.floor(Math.random() * mockResponses.length);
+                const generatedText = mockResponses[randomIndex];
+
+                output.innerHTML = `<span class="text-green-400">الأفكار التي تم توليدها لـ "${input}":</span><br><br>${generatedText}`;
+                showToast('تم توليد الأفكار بنجاح!', 2000);
+
+            } catch (error) {
+                console.error('Mock LLM API error:', error);
+                output.innerHTML = '<span class="text-red-400">حدث خطأ أثناء توليد الأفكار. الرجاء المحاولة مرة أخرى.</span>';
+                showToast('حدث خطأ أثناء توليد الأفكار.', 3000);
+            } finally {
+                loadingSpinner.classList.add('hidden'); // Hide spinner
+            }
+        }
+
+        // Initial setup on load
+        document.addEventListener('DOMContentLoaded', () => {
+            updateWelcomeMessage(); // Set initial welcome message
+            // Show welcome modal on first load
+            if (!sessionStorage.getItem('mvpWelcomeModalShown')) {
+                openModal('welcomeModal');
+                sessionStorage.setItem('mvpWelcomeModalShown', 'true');
+            }
+        });
+    </script>
+</body>
+</html>

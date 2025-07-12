@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Future Builders Platform - نظام بيئي لتبادل المعرفة</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter for a modern look -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        html {
+            scroll-behavior: smooth; /* Smooth scrolling for anchor links */
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0F0F1A; /* Deep dark blue/purple */
+            color: #E0E0F0; /* Light off-white text */
+            line-height: 1.6;
+            overflow-x: hidden; /* Prevent horizontal scroll from animations */
+        }
+        .container {
+            max-width: 1200px;
+        }
+        /* New vibrant gradient for accents - Purple to Pink/Orange */
+        .gradient-bg {
+            background: linear-gradient(90deg, #6A0DAD, #FF69B4); /* Deep Purple to Hot Pink */
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #6A0DAD, #FF69B4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* Redesigned card styling */
+        .inspiration-card {
+            background-color: #1A1A2E; /* Slightly lighter dark blue */
+            border: 1px solid #333355;
+            border-radius: 1.5rem; /* More rounded corners */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); /* Soft, deep shadow */
+            transition: transform 0.4s ease-in-out, box-shadow 0.4s ease-in-out, border-color 0.4s ease-in-out;
+        }
+        .inspiration-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
+            border-color: #FF69B4; /* Highlight border on hover */
+        }
+        /* Hero section specific styling */
+        .hero-overlay {
+            background: linear-gradient(to top, rgba(15, 15, 26, 0.9), rgba(15, 15, 26, 0.2));
+        }
+        .hero-background {
+            background-image: url('https://placehold.co/1920x1080/4B0082/E0E0F0?text=Inspiring+Future+Connections');
+            opacity: 0.3;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Ensure it's behind the overlay */
+        }
+        .hero-section {
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 80vw; /* Responsive width */
+            height: 80vw; /* Responsive height */
+            max-width: 800px; /* Max size */
+            max-height: 800px;
+            background: radial-gradient(circle at center, rgba(106, 13, 173, 0.3), rgba(255, 105, 180, 0.2), transparent 70%);
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            animation: pulseGlow 8s infinite alternate ease-in-out;
+            z-index: 0; /* Behind content, above background image */
+        }
+
+        @keyframes pulseGlow {
+            0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.6; }
+            50% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
+            100% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.6; }
+        }
+
+        /* Hero text animation */
+        .hero-heading span {
+            opacity: 0;
+            display: inline-block;
+            animation: fadeInScale 0.8s forwards;
+            animation-delay: var(--delay);
+        }
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.8) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+        .hero-description {
+            opacity: 0;
+            animation: fadeIn 1.5s forwards;
+            animation-delay: 1.5s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Scroll animations */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .animate-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        /* Alternate background colors for sections */
+        section:nth-of-type(odd) {
+            background-color: #0F0F1A;
+        }
+        section:nth-of-type(even) {
+            background-color: #1A1A2E;
+        }
+        /* Specific override for the first section (Hero) */
+        #home {
+            background-color: #0F0F1A; /* Ensure hero section has the base dark color */
+        }
+
+        /* Back to top button */
+        #back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(90deg, #6A0DAD, #FF69B4);
+            color: white;
+            padding: 12px 15px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+            z-index: 1000;
+        }
+        #back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Button hover effect */
+        .btn-primary {
+            display: inline-block;
+            background: linear-gradient(90deg, #6A0DAD, #FF69B4);
+            color: white;
+            padding: 12px 28px;
+            border-radius: 9999px; /* Full rounded */
+            font-weight: 600;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer; /* Ensure cursor indicates it's clickable */
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+            opacity: 1; /* Ensure full opacity on hover */
+        }
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            transition: all 0.75s ease-out;
+            transform: translate(-50%, -50%) scale(0);
+            z-index: 1;
+        }
+        .btn-primary:hover::before {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 0;
+        }
+        .btn-primary span {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Responsive video container */
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+            border-radius: 1.5rem; /* Rounded corners for videos */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1001; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: #1A1A2E;
+            margin: auto;
+            padding: 30px;
+            border: 1px solid #333355;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+            position: relative;
+            text-align: right;
+        }
+        .close-button {
+            color: #aaa;
+            float: left; /* Position on the left for RTL */
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close-button:hover,
+        .close-button:focus {
+            color: #FF69B4;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header/Navigation -->
+    <header class="bg-black bg-opacity-70 py-4 px-6 md:px-12 shadow-xl fixed top-0 left-0 right-0 z-50 backdrop-blur-sm">
+        <nav class="container mx-auto flex justify-between items-center">
+            <div class="text-2xl font-bold gradient-text">
+                Future Builders Platform
+            </div>
+            <ul class="flex space-x-6 space-x-reverse">
+                <li><a href="#home" class="text-gray-300 hover:text-white transition duration-300 font-medium">الرئيسية</a></li>
+                <li><a href="#inspiring-message" class="text-gray-300 hover:text-white transition duration-300 font-medium">رسالة ملهمة</a></li>
+                <li><a href="#our-core-vision" class="text-gray-300 hover:text-white transition duration-300 font-medium">رؤيتنا</a></li>
+                <li><a href="#about" class="text-gray-300 hover:text-white transition duration-300 font-medium">عنا</a></li>
+                <li><a href="#detailed-roles" class="text-gray-300 hover:text-white transition duration-300 font-medium">أدوارنا التفصيلية</a></li>
+                <li><a href="#main-components" class="text-gray-300 hover:text-white transition duration-300 font-medium">مكوناتنا الرئيسية</a></li>
+                <li><a href="#innovation-lab" class="text-gray-300 hover:text-white transition duration-300 font-medium">مختبر الابتكار</a></li>
+                <li><a href="#project-management" class="text-gray-300 hover:text-white transition duration-300 font-medium">إدارة المشاريع</a></li>
+                <li><a href="#projects-showcase" class="text-gray-300 hover:text-white transition duration-300 font-medium">معرض المشاريع</a></li>
+                <li><a href="#events-meetups" class="text-gray-300 hover:text-white transition duration-300 font-medium">الفعاليات واللقاءات</a></li>
+                <li><a href="#personalized-dashboard" class="text-gray-300 hover:text-white transition duration-300 font-medium">لوحة التحكم الشخصية</a></li>
+                <li><a href="#gamification-elements" class="text-gray-300 hover:text-white transition duration-300 font-medium">عناصر التحفيز</a></li>
+                <li><a href="#global-ambition" class="text-gray-300 hover:text-white transition duration-300 font-medium">طموحنا العالمي</a></li>
+                <li><a href="#why-neom" class="text-gray-300 hover:text-white transition duration-300 font-medium">لماذا نيوم؟</a></li>
+                <li><a href="#neom-request" class="text-gray-300 hover:text-white transition duration-300 font-medium">طلب خاص</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative h-screen flex items-center justify-center text-center pt-16 hero-section">
+        <!-- Background image placeholder - Abstract future theme -->
+        <div class="hero-background"></div>
+        <div class="absolute inset-0 hero-overlay"></div>
+        <div class="relative z-10 p-8 rounded-lg">
+            <h1 class="text-5xl md:text-7xl font-extrabold mb-4 leading-tight gradient-text hero-heading">
+                <!-- Text split into spans for individual animation -->
+                <span>F</span><span>u</span><span>t</span><span>u</span><span>r</span><span>e</span> <span>B</span><span>u</span><span>i</span><span>l</span><span>d</span><span>e</span><span>r</span><span>s</span> <span>P</span><span>l</span><span>a</span><span>t</span><span>f</span><span>o</span><span>r</span><span>m</span><span>:</span> <span>ن</span><span>ص</span><span>ن</span><span>ع</span> <span>ا</span><span>ل</span><span>م</span><span>س</span><span>ت</span><span>ق</span><span>ب</span><span>ل</span> <span>ب</span><span>ا</span><span>ل</span><span>م</span><span>ع</span><span>ر</span><span>ف</span><span>ة</span> <span>و</span><span>ا</span><span>ل</span><span>م</span><span>و</span><span>ا</span><span>ه</span><span>ب</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-200 mb-8 max-w-3xl mx-auto hero-description">
+                منصة طلابية رائدة، لبناء نظام بيئي لتبادل المعرفة ودعم الطلاب في التقنية، الإبداع، التواصل، والنمو.
+            </p>
+            <a href="#inspiring-message" class="btn-primary animate-on-scroll">
+                <span>اكتشف منصتنا</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- Inspiring Message Section (Video Section) -->
+    <section id="inspiring-message" class="py-20 px-6 md:px-12 text-center animate-on-scroll">
+        <div class="container mx-auto">
+            <h2 class="text-4xl font-bold mb-12 gradient-text">رسالة ملهمة</h2>
+            <div class="inspiration-card p-8 rounded-2xl max-w-4xl mx-auto">
+                <p class="text-xl text-gray-300 mb-8">
+                    شاهد هذه الرسالة الملهمة التي تعكس جوهر رؤيتنا وطموحنا في بناء مستقبل مشرق.
+                </p>
+                <div class="video-container">
+                    <iframe
+                        src="https://www.youtube.com/embed/6fVtY11654w"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen
+                    ></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Our Core Vision Section -->
+    <section id="our-core-vision" class="py-20 px-6 md:px-12 text-center animate-on-scroll">
+        <div class="container mx-auto">
+            <h2 class="text-4xl font-bold mb-8 gradient-text">رؤيتنا الأساسية</h2>
+            <p class="text-xl text-gray-200 mb-12 max-w-4xl mx-auto">
+                بناء منصة يقودها الطلاب، تعمل على تمكين الطلاب بالمحتوى التعليمي، التقني، والعملي، مع تعزيز التعلم من الأقران وتبادل المهارات بما يتماشى مع مستقبل العمل.
+            </p>
+        </div>
+    </section>
+
+    <!-- About Us Section -->
+    <section id="about" class="py-20 px-6 md:px-12 text-center animate-on-scroll">
+        <div class="container mx-auto">
+            <h2 class="text-4xl font-bold mb-12 gradient-text">عنا: Future Builders Platform</h2>
+            <div class="inspiration-card p-8 rounded-2xl max-w-4xl mx-auto">
+                <h3 class="text-3xl font-semibold mb-4 text-white">من نحن</h3>
+                <p class="text-gray-300 text-lg mb-6">
+                    نحن محمد وغدي، مؤسسا Future Builders Platform، ومجموعة من الطلاب الشغوفين بالتقنية والثقافة والابتكار. هدفنا هو بناء نظام بيئي لتبادل المعرفة يدعم الطلاب في مجالات التقنية، الإبداع، التواصل، والنمو الشخصي. نؤمن بأن البرمجة أداة قوية لحل المشكلات، وأن الثقافة هي أساس بناء المجتمعات المزدهرة.
+                </p>
+                <p class="text-gray-300 text-lg">
+                    هذه المنصة هي ثمرة جهودنا المشتركة لتبسيط المفاهيم التقنية، ومناقشة القضايا الثقافية، وتقديم رؤى ملهمة من خلال الفكر والتجارب. نسعى لنكون جسراً يربط بين المعرفة الأكاديمية والتطبيق العملي، ونطمح لإلهام مجتمعنا نحو مستقبل أفضل وأكثر وعياً.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Detailed Roles Section -->
+    <section id="detailed-roles" class="py-20 px-6 md:px-12 text-center animate-on-scroll">
+        <div class="container mx-auto">
+            <h2 class="text-4xl font-bold mb-12 gradient-text">أدوارنا التفصيلية في Future Builders Platform</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                <!-- Ghadi's Detailed Role -->
+                <div class="inspiration-card p-8 rounded-2xl text-right">
+                    <h3 class="text-3xl font-semibold mb-4 text-white">غدي: إبراز المواهب والتجارب الملهمة</h3>
+                    <p class="text-gray-300 text-lg mb-4">
+                        كمؤسسة مشاركة في Future Builders Platform، أقود **قسم الأصوات والبودكاست**. مهمتي الأساسية هي تسليط الضوء على المواهب الفريدة والتجارب الملهمة من داخل المجتمع وخارجه.
+                    </p>
+                    <p class="text-gray-300 text-lg mb-4">
+                        **ما أهدف لفعله:**
+                        <ul class="list-disc list-inside text-gray-300 text-lg pr-4">
+                            <li>إجراء مقابلات معمقة مع أصحاب المواهب والخبرات المتنوعة، مع التركيز على قصص نجاحهم وتحدياتهم.</li>
+                            <li>إنتاج محتوى بودكاست جذاب يتناول جوانب مختلفة من حياة الطلاب، بما في ذلك النجاحات، التحديات، والنمو الشخصي.</li>
+                            <li>تشجيع رواية القصص لتعزيز التعبير عن الذات وتبادل الخبرات بين الطلاب.</li>
+                            <li>بناء جسور التواصل بين الطلاب والمحترفين لإلهام الجيل القادم.</li>
+                            <li>إثراء النقاش حول القضايا الثقافية والاجتماعية من خلال منظور إنساني وعاطفي.</li>
+                        </ul>
+                    </p>
+                </div>
+                <!-- Mohammed's Detailed Role -->
+                <div class="inspiration-card p-8 rounded-2xl text-right">
+                    <h3 class="text-3xl font-semibold mb-4 text-white">محمد: تبسيط التقنية وحل المشكلات بالبرمجة</h3>
+                    <p class="text-gray-300 text-lg mb-4">
+                        كمؤسس مشارك في Future Builders Platform، أقود **مركز التقنية والابتكار**. يتركز دوري على جعل المفاهيم التقنية المعقدة سهلة الفهم ومتاحة للجميع.
+                    </p>
+                    <p class="text-gray-300 text-lg mb-4">
+                        **ما أهدف لفعله:**
+                        <ul class="list-disc list-inside text-gray-300 text-lg pr-4">
+                            <li>تقديم دروس تعليمية وورش عمل مبسطة في مجالات مثل الذكاء الاصطناعي، البرمجة، والأمن السيبراني.</li>
+                            <li>شرح كيفية استخدام الأدوات والتقنيات الحديثة لزيادة الإنتاجية وتبسيط المهام اليومية.</li>
+                            <li>تسليط الضوء على أمثلة واقعية لكيفية استخدام البرمجة كأداة قوية لحل التحديات والمشكلات في حياتنا.</li>
+                            <li>تشجيع الطلاب على استكشاف شغفهم بالتقنية وتطوير مهاراتهم البرمجية.</li>
+                            <li>المساهمة في بناء جيل قادر على الابتكار وصناعة المستقبل من خلال فهم عميق للتقنية.</li>
+                        </ul>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Components Section -->
+    <section id="main-components" class="py-20 px-6 md:px-12 text-center animate-on-scroll">
+        <div class="container mx-auto">
+            <h2 class="text-4xl font-bold mb-12 gradient-text">مكوناتنا الرئيسية</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Tech & Innovation Hub -->
+                <div id="tech-hub" class="inspiration-card p-6 rounded-xl text-right">
+                    <h3 class="text-2xl font-semibold mb-4 text-white">مركز التقنية والابتكار</h3>
+                    <p class="text-gray-300 mb-4">
+                        بقيادة محمد، نقدم دروساً تعليمية، شروحات مبسطة، و**ورش عمل تفاعلية** تتضمن **محررات أكواد مدمجة** و**محاكاة ومختبرات افتراضية** حول الذكاء الاصطناعي، البرمجة، الأمن السيبراني، الأدوات، وإنتاجية التقنية. كما نعرض **دراسات حالة لمشاريع برمجية** و**اختبارات وتحديات فورية** — كل ذلك بتبسيط من الطلاب.
+                    </p>
+                    <a href="#" class="btn-primary mt-4 text-sm" onclick="openGenericModal(event, 'بدء ورشة العمل', 'هذه الوظيفة ستوفر لك وصولاً مباشراً إلى ورش العمل التفاعلية والمحتوى التعليمي في مجالات التقنية. ترقبوا إطلاقها قريباً!')">
+                        <span><i class="fas fa-play ml-2"></i> بدء ورشة العمل</span>
+                    </a>
+                </div>
+                <!-- Voices & Podcast Division -->
+                <div id="podcast-division" class="inspiration-card p-6 rounded-xl text-right">
+                    <h3 class="text-2xl font-semibold mb-4 text-white">قسم الأصوات والبودكاست</h3>
+                    <p class="text-gray-300 mb-4">
+                        بقيادة غدي، يدير هذا القسم ذراعاً إعلامياً يشمل بودكاست، **سلسلة قصص نجاح**، مقابلات، ومحادثات عميقة حول حياة الطلاب، النجاح، والتحديات.
+                    </p>
+                    <a href="#" class="btn-primary mt-4 text-sm" onclick="openGenericModal(event, 'تشغيل أحدث حلقة', 'استمع إلى أحدث حلقات البودكاست وقصص النجاح الملهمة. هذه الميزة قيد الإعداد لتجربة استماع مميزة!')">
+                        <span><i class="fas fa-podcast ml-2"></i> تشغيل أحدث حلقة</span>
+                    </a>
+                </div>
+                <!-- Discussion & Support Space -->
+                <div id="discussion-space" class="inspiration-card p-6 rounded-xl text-right">
+                    <h3 class="text-2xl font-semibold mb-4 text-white">مساحة النقاش والدعم</h3>
+                    <p class="text-gray-300 mb-4">
+                        مساحة مخصصة للطلاب فقط للاستفسارات وتبادل الخبرات، الإرشاد، تبادل الأفكار، طرح المشاريع، والمناقشات حول مواضيع متنوعة. نسعى مستقبلاً لتضمين **برنامج إرشادي (Mentorship Program)** فعال و**جلسات حوار وإرشاد مباشرة**.
+                    </p>
+                    <a href="#" class="btn-primary mt-4 text-sm" onclick="openGenericModal(event, 'انضم للمناقشة', 'انضم إلى مجتمعنا الطلابي النابض بالحياة لتبادل الأفكار، طرح الأسئلة، والحصول على الدعم. مساحة النقاش ستكون متاحة قريباً!')">
+                        <span><i class="fas fa-comments ml-2"></i> انضم للمناقشة</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Innovation Lab: AI-Powered Brainstorming (New Section) -->
+    <section id="innovation-lab" class="py-20 px-6 md:px-12 text-center animate-on-scroll">
+        <div class="container mx-auto">
+            <h2 class="text-4xl font-bold mb-12 gradient-text">مختبر الابتكار: العصف الذهني المدعوم بالذكاء الاصطناعي</h2>
+            <div class="inspiration-card p-8 rounded-2xl max-w-4xl mx-auto">
+                <p class="text-xl text-gray-300 mb-6">
+                    أطلق العنان لإبداعك مع مساعد العصف الذهني المدعوم بالذكاء الاصطناعي. أدخل موضوعك، ودع ذكاءنا الاصطناعي يساعدك في توليد أفكار مبتكرة!
+                </p>
+                <div class="flex flex-col items-center justify-center space-y-4">
+                    <textarea id="brainstormInput" class="w-full p-4 rounded-lg bg-gray-800 text-gray-200 border border-gray-700 focus:outline-none focus:border-pink-500 transition duration-300" rows="4" placeholder="أدخل موضوع أو فكرة العصف الذهني هنا..."></textarea>
+                    <button class="btn-primary" onclick="generateIdeas(event)">
+                        <span><i class="fas fa-magic ml-2"></i> توليد الأفكار</span>
+                    </button>
+                    <div id="brainstormOutput" class="w-full p-4 mt-4 rounded-lg bg-gray-800 text-gray-200 border border-gray-700 text-right min-h-[100px] flex items-center justify-center">
+                        <span class="text-gray-500">ستظهر أفكارك هنا...</span>
+                    </div>
+                    <div id="loadingSpinner" class="hidden mt-4 text-pink-500">
+                        <i class="fas fa-spinner fa-spin text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Management Section -->
+    <section id="project-management" class="py-20 px-6 md:px-12 text-center animate-on-scroll">
+        <div class="container mx-auto">
+            <h2 class="text-4xl font-bold mb-12 gradient-text">قطاع إدارة المشاريع: من الفكرة إلى الواقع</h2>
+            <div class="inspiration-card p-8 rounded-2xl max-w-4xl mx-auto">
+                <p class="text-xl text-gray-300 mb-6">
+                    بصفتنا (محمد وغدي) من خلفية متخصصة في إدارة المشاريع، نؤمن بأن تحويل الأفكار المبتكرة إلى واقع ملموس يتطلب مهارات قوية في التخطيط والتنفيذ والمتابعة. هذا القطاع يهدف إلى تمكين الطلاب بالأدوات والمنهجيات اللازمة لإدارة مشاريعهم بنجاح، سواء كانت تقنية أو ثقافية أو مجتمعية.
+                </p>
+                <p class="text-gray-300 text-lg mb-4">
+                    **ماذا نقدم في هذا القطاع:**
+                    <ul class="list-disc list-inside text-gray-300 text-lg pr-4">
+                        <li>**منهجيات إدارة المشاريع:** شروحات مبسطة لمنهجيات Agile, Scrum, Waterfall وكيفية تطبيقها.</li>
+                        <li>**أدوات التخطيط والمتابعة:** استعراض لأدوات شائعة مثل Trello, Asana, Jira وكيفية استخدامها بفعالية.</li>
+                        <li>**دراسات حالة لمشاريع ناجحة وفاشلة:** تحليل مشاريع حقيقية للتعلم من النجاحات والأخطاء.</li>
+                        <li>**نصائح عملية:** إرشادات حول تحديد الأهداف، إدارة الموارد، حل المشكلات، والتواصل الفعال ضمن فريق المشروع.</li>
+                        <li>**ورش عمل تطبيقية:** لتمكين الطلاب من تطبيق المفاهيم النظرية على مشاريعهم الخاصة.</li>
+                    </ul>
+                </p>
+                <a href="#" class="btn-primary mt-8" onclick="openGenericModal(event, 'استكشف إدارة المشاريع', 'تعرف على أساسيات إدارة المشاريع، المنهجيات، والأدوات التي تساعدك على تحويل أفكارك إلى مشاريع ناجحة. محتوى هذا القسم قيد الإعداد!')">
+                    <span><i class="fas fa-tasks ml-2"></i> استكشف إدارة المشاريع</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Student Projects Showcase Section -->
+    <section id="projects-showcase" class="py-20 px-6 md:px-12 text-center animate-on-scroll">
+        <div class="container mx-auto">
+            <h2 class="text-4xl font-bold mb-8 gradient-text">معرض المشاريع الطلابية</h2>
+            <div class="inspiration-card p-8 rounded-2xl max-w-4xl mx-auto">
+                <p class="text-xl text-gray-300 mb-6">
+                    هنا، يمكن للطلاب عرض مشاريعهم وأفكارهم المبتكرة في مختلف المجالات التقنية والثقافية. هذا المعرض يهدف إلى إبراز المواهب، تشجيع الإبداع، وتوفير منصة لتبادل الخبرات بين الطلاب، مع **ميزات التصفية والبحث** و**نظام التصويت والتقييم** و**صفحات تفصيلية للمشاريع**.
+                </p>
+                <!-- Placeholder for project cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+                    <div class="bg-[#0F0F1A] p-4 rounded-lg border border-gray-700 text-left">
+                        <h4 class="text-xl font-semibold text-white mb-2">مشروع: مساعد الذكاء الاصطناعي</h4>
+                        <p class="text-gray-400 text-sm">تطبيق ويب يستخدم تعلم الآلة لتحسين تجربة المستخدم.</p>
+                        <p class="text-gray-500 text-xs mt-2">بواسطة: فريق الابتكار</p>
+                    </div>
+                    <div class="bg-[#0F0F1A] p-4 rounded-lg border border-gray-700 text-left">
+                        <h4 class="text-xl font-semibold text-white mb-2">بودكاست: رحلة رائد أعمال</h4>
+                        <p class="text-gray-400 text-sm">مقابلة مع رائد أعمال شاب حول تحديات بناء شركة ناشئة.</p>
+                        <p class="text-gray-500 text-xs mt-2">بواسطة: غدي</p>
+                    </div>
+                    <div class="bg-[#0F0F1A] p-4 rounded-lg border border-gray-700 text-left">
+                        <h4 class="text-xl font-semibold text-white mb-2">ورشة عمل: أساسيات الأمن السيبراني</h4>
+                        <p class="text-gray-400 text-sm">دليل عملي للمبتدئين لحماية بياناتهم على الإنترنت.</p>
+                        <p class="text-gray-500 text-xs mt-2">بواسطة: محمد</p>
+                    </div>
+                </div>
+                <a href="#" class="btn-primary mt-8" onclick="openGenericModal(event, 'شارك مشروعك الآن', 'اعرض مشروعك المبتكر على منصتنا! هذه الميزة ستتيح لك مشاركة إبداعاتك مع مجتمعنا والحصول على التقييم والدعم. سيتم تفعيلها قريباً!')">
+                    <span>شارك مشروعك الآن</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Virtual Events & Meetups Section -->
+    <section id="events-meetups" class="py-20 px-6 md:px-12 text-center animate-on-scroll">
+        <div class="container mx-auto">
+            <h2 class="text-4xl font-bold mb-12 gradient-text">الفعاليات واللقاءات الافتراضية</h2>
+            <div class="inspiration-card p-8 rounded-2xl max-w-4xl mx-auto">
+                <p class="text-xl text-gray-300 mb-6">
+                    نخطط لتنظيم ندوات عبر الإنترنت (webinars) و**جلسات حوار وإرشاد مباشرة (Live Q&A and Mentorship Sessions)** مع خبراء ومعلمين في مجالات التقنية، الثقافة، والتطوير الشخصي. هذه اللقاءات ستعزز التفاعل المباشر وتبادل المعرفة.
+                </p>
+                <!-- Placeholder for event listings -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+                    <div class="bg-[#0F0F1A] p-4 rounded-lg border border-gray-700 text-left">
+                        <h4 class="text-xl font-semibold text-white mb-2">ندوة: مستقبل الذكاء الاصطناعي في 2030</h4>
+                        <p class="text-gray-400 text-sm">التاريخ: 2025/08/15 | الوقت: 7:00 مساءً (بتوقيت الرياض)</p>
+                        <p class="text-gray-500 text-xs mt-2">المتحدث: خبير تقني</p>
+                    </div>
+                    <div class="bg-[#0F0F1A] p-4 rounded-lg border border-gray-700 text-left">
+                        <h4 class="text-xl font-semibold text-white mb-2">جلسة حوار: الفن الرقمي والهوية الثقافية</h4>
+                        <p class="text-gray-400 text-sm">التاريخ: 2025/09/01 | الوقت: 8:00 مساءً (بتوقيت الرياض)</p>
+                        <p class="text-gray-500 text-xs mt-2">المتحدث: فنان رقمي</p>
+                    </div>
+                </div>
+                <a href="#" class="btn-primary mt-8" onclick="openGenericModal(event, 'عرض التقويم الكامل', 'اكتشف جميع الفعاليات واللقاءات القادمة في تقويمنا التفاعلي. سجل حضورك وكن جزءاً من مجتمعنا الملهم! سيتم تفعيل هذه الميزة قريباً.')">
+                    <span>عرض التقويم الكامل</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Personalized Dashboard & Learning Section (Enhanced) -->
+    <section id="personalized-dashboard" class="py-20 px-6 md:px-12 text-center animate-on-scroll">
+        <div class="container mx-auto">
+            <h2 class="text-4xl font-bold mb-12 gradient-text">لوحة التحكم الشخصية والتعلم المدعوم بالذكاء الاصطناعي</h2>
+            <div class="inspiration-card p-8 rounded-2xl max-w-4xl mx-auto">
+                <p class="text-xl text-gray-300 mb-6">
+                    لكل طالب، ستقدم Future Builders Platform لوحة تحكم شخصية شاملة، مصممة لتعزيز رحلتك التعليمية وتفاعلك مع المجتمع بقوة الذكاء الاصطناعي.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-right">
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-3 text-white"><i class="fas fa-robot ml-2 text-pink-400"></i> مسارات تعلم مدعومة بالذكاء الاصطناعي</h3>
+                        <p class="text-gray-300">
+                            احصل على توصيات تعليمية ومسارات محتوى مخصصة بناءً على اهتماماتك، مهاراتك، وتقدمك، بتوجيه من خوارزميات الذكاء الاصطناعي المتقدمة.
+                        </p>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-3 text-white"><i class="fas fa-chart-line ml-2 text-purple-400"></i> تتبع التقدم والتحليلات</h3>
+                        <p class="text-gray-300">
+                            راقب إكمال الدورات، الورش، والوحدات التعليمية بتقارير تقدم مفصلة ومرئية.
+                        </p>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-3 text-white"><i class="fas fa-bookmark ml-2 text-blue-400"></i> المحتوى المحفوظ والمفضل</h3>
+                        <p class="text-gray-300">
+                            احفظ بسهولة المقالات، حلقات البودكاست، المشاريع، أو أي محتوى آخر للعودة إليه في أي وقت، لإنشاء مكتبة معرفية شخصية خاصة بك.
+                        </p>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-3 text-white"><i class="fas fa-history ml-2 text-green-400"></i> سجل النشاط والمساهمات</h3>
+                        <p class="text-gray-300">
+                            نظرة عامة شاملة على جميع مساهماتك في مساحات النقاش، المشاريع، أو أي أنشطة أخرى في المنصة.
+                        </p>
+                    </div>
+                </div>
+                <button class="btn-primary mt-8" onclick="openGenericModal(event, 'استكشف لوحة التحكم الشخصية', 'لوحة التحكم الشخصية هي بوابتك لتجربة تعليمية مخصصة! هذه الميزة قيد التطوير وستقدم لك أدوات قوية لتتبع تقدمك وإدارة محتواك المفضل.')">
+                    <span><i class="fas fa-user-circle ml-2"></i> استكشف لوحة التحكم</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gamification Elements Section -->
+    <section id="gamification-elements" class="py-20 px-6 md:px-12 text-center animate-on-scroll">
+        <div class="container mx-auto">
+            <h2 class="text-4xl font-bold mb-12 gradient-text">عناصر التحفيز والتحدي</h2>
+            <div class="inspiration-card p-8 rounded-2xl max-w-4xl mx-auto">
+                <p class="text-xl text-gray-300 mb-6">
+                    لجعل رحلتك التعليمية أكثر متعة وتحفيزاً، سنقوم بدمج عناصر التحفيز (Gamification) في المنصة:
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-right">
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-3 text-white"><i class="fas fa-trophy ml-2 text-yellow-400"></i> نقاط الإلهام</h3>
+                        <p class="text-gray-300">
+                            اكسب نقاطاً عند إكمال الورش، المشاركة الفعالة في النقاشات، أو عرض مشاريعك.
+                        </p>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-3 text-white"><i class="fas fa-medal ml-2 text-gray-400"></i> شارات الإنجاز</h3>
+                        <p class="text-gray-300">
+                            احصل على شارات افتراضية مميزة عند تحقيق إنجازات معينة، مثل "خبير AI" أو "مبتكر الشهر".
+                        </p>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-3 text-white"><i class="fas fa-chart-bar ml-2 text-red-400"></i> لوحات الصدارة</h3>
+                        <p class="text-gray-300">
+                            تنافس ودياً مع زملائك وشاهد ترتيبك بين أكثر الطلاب نشاطاً ومساهمة في المجتمع.
+                        </p>
+                    </div>
+                </div>
+                <button class="btn-primary mt-8" onclick="openGenericModal(event, 'عناصر التحفيز والتحدي', 'استعد لتجربة تعليمية مليئة بالمرح والتحدي! عناصر التحفيز ستضيف بعداً جديداً لرحلتك في المنصة. ترقبوا تفعيلها قريباً!')">
+                    <span><i class="fas fa-gamepad ml-2"></i> انضم للتحدي</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Global Ambition Section -->
+    <section id="global-ambition" class="py-20 px-6 md:px-12 text-center animate-on-scroll">
+        <div class="container mx-auto">
+            <h2 class="text-4xl font-bold mb-8 gradient-text">طموحنا العالمي: إبراز مواهب المستقبل والتأثير الإيجابي</h2>
+            <p class="text-xl text-gray-200 mb-12 max-w-4xl mx-auto">
+                من خلال Future Builders Platform، نحلم بأن نصل إلى **أكبر عدد ممكن من الناس حول العالم**، وأن نُحدث **تأثيراً إيجابياً ملموساً في حياتهم**. نسعى جاهدين للتعرف على **المشكلات والتحديات التي تواجه الأفراد والمجتمعات**، ونعمل على تقديم حلول مبتكرة لها، سواء عبر التقنية أو الفكر الثقافي. هدفنا الأسمى هو **إبراز مواهب طلاب المشاريع للعالم**، وتمكينهم من تحقيق أقصى إمكاناتهم، وبناء مستقبل أفضل للجميع. معاً، يمكننا تحقيق المستحيل.
+            </p>
+            <div class="flex flex-col md:flex-row justify-center items-center gap-8">
+                <div class="inspiration-card p-6 rounded-xl flex-1 max-w-md">
+                    <h3 class="text-2xl font-semibold mb-4 text-white">
+                        <i class="fas fa-users ml-2 text-pink-400"></i> وصول وتأثير واسع
+                    </h3>
+                    <p class="text-gray-300">
+                        نسعى لنشر المعرفة والإلهام لأوسع شريحة ممكنة من الجمهور، لتمكينهم من مواجهة تحدياتهم وتحقيق طموحاتهم.
+                    </p>
+                </div>
+                <div class="inspiration-card p-6 rounded-xl flex-1 max-w-md">
+                    <h3 class="text-2xl font-semibold mb-4 text-white">
+                        <i class="fas fa-lightbulb ml-2 text-purple-400"></i> حلول مبتكرة للمشكلات
+                    </h3>
+                    <p class="text-gray-300">
+                        نلتزم بالبحث عن المشكلات الحقيقية وتقديم حلول إبداعية وعملية، مستفيدين من التقنية والفكر الثقافي.
+                    </p>
+                </div>
+                <div class="inspiration-card p-6 rounded-xl flex-1 max-w-md">
+                    <h3 class="text-2xl font-semibold mb-4 text-white">
+                        <i class="fas fa-globe-americas ml-2 text-blue-400"></i> مجتمع عالمي مترابط
+                    </h3>
+                    <p class="text-gray-300">
+                        نهدف إلى إنشاء مجتمع عالمي من المبتكرين والمفكرين، يتبادلون الأفكار والخبرات لحل أكبر تحديات العالم.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why NEOM Section -->
+    <section id="why-neom" class="py-20 px-6 md:px-12 text-center animate-on-scroll">
+        <div class="container mx-auto">
+            <h2 class="text-4xl font-bold mb-12 gradient-text">لماذا نيوم يجب أن تكون شريكاً؟</h2>
+            <div class="inspiration-card p-8 rounded-2xl max-w-4xl mx-auto">
+                <p class="text-xl text-gray-300 mb-6">
+                    تتشارك Future Builders Platform مع رؤية نيوم الطموحة في بناء مستقبل قائم على الابتكار، الاستدامة، وتمكين الإنسان. نحن نرى في نيوم الشريك الطبيعي لمبادرتنا الطلابية، وذلك للأسباب التالية:
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-right">
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-3 text-white"><i class="fas fa-handshake ml-2 text-pink-400"></i> توافق الرؤى والأهداف</h3>
+                        <p class="text-gray-300">
+                            منصتنا تسعى لتمكين الجيل القادم من خلال التقنية والثقافة، وهو ما يتماشى تماماً مع أهداف نيوم في بناء مجتمعات معرفية ومبتكرة.
+                        </p>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-3 text-white"><i class="fas fa-lightbulb ml-2 text-purple-400"></i> حاضنة للمواهب والابتكار</h3>
+                        <p class="text-gray-300">
+                            يمكن للمنصة أن تكون منصة رئيسية لاكتشاف وتطوير وإبراز المواهب الشابة من داخل نيوم وخارجها، خاصة في قطاع المشاريع، مما يثري البيئة الابتكارية.
+                        </p>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-3 text-white"><i class="fas fa-globe ml-2 text-blue-400"></i> تعزيز مكانة نيوم عالمياً</h3>
+                        <p class="text-gray-300">
+                            من خلال إبراز قصص النجاح والمشاريع الطلابية الملهمة التي تنطلق من نيوم، يمكن للمنصة أن تساهم في تعزيز صورة نيوم كمركز عالمي للابتكار البشري والتقني.
+                        </p>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-3 text-white"><i class="fas fa-users-cog ml-2 text-green-400"></i> بناء مجتمع معرفي متكامل</h3>
+                        <p class="text-gray-300">
+                            دعم نيوم سيمكننا من توسيع نطاق برامج الإرشاد، ورش العمل، والفعاليات، مما يخلق مجتمعاً طلابياً أكثر ترابطاً وقدرة على المساهمة الفعالة في بناء المستقبل.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEOM Request Section -->
+    <section id="neom-request" class="py-20 px-6 md:px-12 text-center animate-on-scroll">
+        <div class="container mx-auto">
+            <h2 class="text-4xl font-bold mb-8 gradient-text">طلب خاص: شراكة مع نيوم</h2>
+            <div class="inspiration-card p-8 rounded-2xl max-w-4xl mx-auto">
+                <p class="text-xl text-gray-300 mb-6">
+                    بصفتنا مؤسسي "Future Builders Platform" وطلاباً من قلب نيوم، نتشرف بطلب موافقتكم الكريمة على ذكر انطلاق مبادرتنا من نيوم، كجزء من جهودنا لإبراز المواهب والإسهام في رؤية نيوم الطموحة.
+                </p>
+                <p class="text-xl text-gray-300">
+                    كما نأمل الحصول على إذنكم لإجراء مقابلات مع الطلاب والمواهب ضمن قطاعات نيوم المختلفة، وذلك بهدف تسليط الضوء على إنجازاتهم وتجاربهم الملهمة، ونشرها عبر منصتنا لتعزيز تبادل المعرفة والخبرات.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black bg-opacity-70 py-8 px-6 md:px-12 text-center text-gray-400">
+        <div class="container mx-auto">
+            <p>&copy; 2025 Future Builders Platform. جميع الحقوق محفوظة.</p>
+            <p class="mt-2">بفخر من الطلاب.</p>
+        </div>
+    </footer>
+
+    <!-- Generic Modal for "Coming Soon" features -->
+    <div id="genericModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('genericModal')">&times;</span>
+            <h3 id="modalTitle" class="text-3xl font-semibold mb-4 gradient-text">الميزة قيد التطوير</h3>
+            <p id="modalMessage" class="text-gray-300 mb-6">
+                نحن نعمل جاهدين على إطلاق هذه الميزة قريباً! ترقبوا المزيد من المحتوى التفاعلي والوظائف المذهلة التي ستعزز تجربتكم في المنصة.
+            </p>
+            <p class="text-gray-400 text-sm">
+                (هذه وظيفة تجريبية. تتطلب هذه الميزة تطوير الواجهة الخلفية.)
+            </p>
+            <button class="btn-primary mt-6" onclick="closeModal('genericModal')">
+                <span>حسناً، فهمت</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Hero section heading animation
+        document.addEventListener('DOMContentLoaded', () => {
+            const heading = document.querySelector('.hero-heading');
+            if (heading) { // Null check for heading
+                const text = heading.textContent;
+                heading.innerHTML = ''; // Clear original text
+
+                // Split text into spans for individual character animation
+                text.split('').forEach((char, index) => {
+                    const span = document.createElement('span');
+                    span.textContent = char;
+                    span.style.setProperty('--delay', `${index * 0.03}s`); // Stagger delay
+                    heading.appendChild(span);
+                });
+            }
+
+            // Intersection Observer for scroll animations
+            const animateOnScrollElements = document.querySelectorAll('.animate-on-scroll');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                    } else {
+                        // Optional: remove is-visible if you want elements to re-animate on scroll back up
+                        // entry.target.classList.remove('is-visible');
+                    }
+                });
+            }, {
+                threshold: 0.1, // Trigger when 10% of the element is visible
+                rootMargin: '0px 0px -50px 0px' // Adjust when elements appear
+            });
+
+            animateOnScrollElements.forEach(element => {
+                observer.observe(element);
+            });
+
+            // Back to Top button logic
+            const backToTopButton = document.getElementById('back-to-top');
+            if (backToTopButton) { // Null check for backToTopButton
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > 300) { // Show button after scrolling 300px
+                        backToTopButton.classList.add('show');
+                    } else {
+                        backToTopButton.classList.remove('show');
+                    }
+                });
+
+                // Add click listener to scroll to top smoothly
+                backToTopButton.addEventListener('click', (event) => {
+                    event.preventDefault(); // Prevent default hash scroll
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                });
+            }
+        });
+
+        // Modal functions
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Generic modal function that accepts event, title and message
+        function openGenericModal(event, title = 'الميزة قيد التطوير', message = 'نحن نعمل جاهدين على إطلاق هذه الميزة قريباً! ترقبوا المزيد من المحتوى التفاعلي والوظائف المذهلة التي ستعزز تجربتكم في المنصة.') {
+            event.preventDefault(); // Prevent default anchor behavior (scrolling to top)
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalMessage').textContent = message;
+            openModal('genericModal');
+        }
+
+        // Close modal if user clicks outside of it
+        window.onclick = function(event) {
+            const genericModal = document.getElementById('genericModal');
+            if (event.target == genericModal) {
+                genericModal.style.display = "none";
+            }
+        }
+
+        // AI Brainstorming Function (Mock LLM Call)
+        async function generateIdeas(event) {
+            event.preventDefault(); // Prevent default form submission if button is inside a form
+            const input = document.getElementById('brainstormInput').value;
+            const output = document.getElementById('brainstormOutput');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+
+            if (!input.trim()) {
+                output.innerHTML = '<span class="text-red-400">الرجاء إدخال موضوع للعصف الذهني!</span>';
+                return;
+            }
+
+            output.innerHTML = ''; // Clear previous output
+            loadingSpinner.classList.remove('hidden'); // Show spinner
+
+            // Simulate LLM API call
+            const mockResponses = [
+                "حلول مبتكرة للمعيشة الحضرية المستدامة: أنظمة ذكية لإدارة النفايات، مزارع عمودية، وشبكات طاقة متجددة.",
+                "مستقبل التعليم: معلمون شخصيون مدعومون بالذكاء الاصطناعي، منصات تعلم محفزة بالألعاب، وفصول دراسية غامرة بتقنية الواقع الافتراضي.",
+                "بناء المجتمع في المدن الذكية: منصات رقمية لمشاركة المواطنين، أسواق للمواهب المحلية، وبرامج تبادل ثقافي.",
+                "التقنية من أجل الصالح العام: أدوات مدعومة بالذكاء الاصطناعي لتسهيل الوصول، blockchain للجمعيات الخيرية الشفافة، وإنترنت الأشياء لمراقبة البيئة."
+            ];
+
+            try {
+                // Simulate network delay
+                await new Promise(resolve => setTimeout(resolve, 2000));
+
+                const randomIndex = Math.floor(Math.random() * mockResponses.length);
+                const generatedText = mockResponses[randomIndex];
+
+                output.innerHTML = `<span class="text-green-400">الأفكار التي تم توليدها لـ "${input}":</span><br><br>${generatedText}`;
+
+            } catch (error) {
+                console.error('Mock LLM API error:', error);
+                output.innerHTML = '<span class="text-red-400">حدث خطأ أثناء توليد الأفكار. الرجاء المحاولة مرة أخرى.</span>';
+            } finally {
+                loadingSpinner.classList.add('hidden'); // Hide spinner
+            }
+        }
+    </script>
+</body>
+</html>
