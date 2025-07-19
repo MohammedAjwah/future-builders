@@ -1,0 +1,168 @@
+body {
+    font-family: Arial, sans-serif;
+    direction: rtl;
+    margin: 0;
+    padding: 0;
+    background: #f5f5f5;
+    color: #333;
+}
+
+.navbar {
+    background: #2c3e50;
+    color: #fff;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 15px;
+}
+
+.navbar a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.hero {
+    background: #3498db;
+    color: #fff;
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.btn {
+    display: inline-block;
+    background: #e67e22;
+    color: #fff;
+    padding: 10px 20px;
+    margin-top: 10px;
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+.btn.secondary {
+    background: #2ecc71;
+}
+
+section {
+    padding: 40px 20px;
+}
+
+.page-title {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.plans {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.plan {
+    background: #ecf0f1;
+    padding: 20px;
+    border-radius: 4px;
+}
+
+.plans-table {
+    width: 80%;
+    margin: auto;
+    border-collapse: collapse;
+}
+
+.plans-table th, .plans-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+.auth-container {
+    width: 300px;
+    margin: 30px auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 4px;
+}
+
+.form input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+
+.form.hidden {
+    display: none;
+}
+
+.dashboard {
+    width: 80%;
+    margin: 20px auto;
+}
+
+.progress {
+    background: #ddd;
+    height: 20px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+#progressBar {
+    background: #27ae60;
+    height: 100%;
+    width: 0;
+    border-radius: 4px;
+}
+
+.advisors {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.advisor {
+    background: #fff;
+    padding: 20px;
+    border-radius: 4px;
+    text-align: center;
+    width: 200px;
+}
+
+.advisor img {
+    width: 100%;
+    border-radius: 4px;
+}
+
+.podcast-list {
+    width: 80%;
+    margin: auto;
+}
+
+.episode {
+    background: #fff;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+
+.thankyou {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    background: #2c3e50;
+    color: #fff;
+    margin-top: 40px;
+}

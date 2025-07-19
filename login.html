@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول / الاشتراك - انطلق</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="index.html" class="logo">انطلق</a>
+        <ul>
+            <li><a href="plans.html">الاشتراكات</a></li>
+        </ul>
+    </nav>
+
+    <div class="auth-container">
+        <div class="form" id="registerForm">
+            <h2>إنشاء حساب</h2>
+            <input type="text" id="regName" placeholder="الاسم" required>
+            <input type="email" id="regEmail" placeholder="البريد الإلكتروني" required>
+            <input type="password" id="regPass" placeholder="كلمة المرور" required>
+            <button onclick="register()" class="btn">تسجيل</button>
+            <p>لديك حساب؟ <a href="#" onclick="toggleForms()">تسجيل الدخول</a></p>
+        </div>
+
+        <div class="form hidden" id="loginForm">
+            <h2>تسجيل الدخول</h2>
+            <input type="text" id="loginName" placeholder="الاسم" required>
+            <input type="password" id="loginPass" placeholder="كلمة المرور" required>
+            <button onclick="login()" class="btn">دخول</button>
+            <p>لا تملك حسابًا؟ <a href="#" onclick="toggleForms()">إنشاء حساب</a></p>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 منصة انطلق</p>
+    </footer>
+<script src="app.js"></script>
+</body>
+</html>
