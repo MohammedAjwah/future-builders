@@ -1,5 +1,5 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Cairo', sans-serif;
     direction: rtl;
     margin: 0;
     padding: 0;
@@ -8,7 +8,7 @@ body {
 }
 
 .navbar {
-    background: #2c3e50;
+    background: linear-gradient(90deg, #6A0DAD, #3498db);
     color: #fff;
     padding: 10px 20px;
     display: flex;
@@ -30,7 +30,7 @@ body {
 }
 
 .hero {
-    background: #3498db;
+    background: linear-gradient(135deg, #6A0DAD, #3498db);
     color: #fff;
     text-align: center;
     padding: 60px 20px;
@@ -38,16 +38,25 @@ body {
 
 .btn {
     display: inline-block;
-    background: #e67e22;
+    background: #6A0DAD;
     color: #fff;
     padding: 10px 20px;
     margin-top: 10px;
     text-decoration: none;
     border-radius: 4px;
+    transition: background 0.3s ease;
+}
+
+.btn:hover {
+    background: #4e0889;
 }
 
 .btn.secondary {
-    background: #2ecc71;
+    background: #3498db;
+}
+
+.btn.secondary:hover {
+    background: #2271b3;
 }
 
 section {
@@ -67,9 +76,10 @@ section {
 }
 
 .plan {
-    background: #ecf0f1;
+    background: #fff;
     padding: 20px;
-    border-radius: 4px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
 .plans-table {
@@ -89,7 +99,8 @@ section {
     margin: 30px auto;
     background: #fff;
     padding: 20px;
-    border-radius: 4px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
 .form input {
@@ -116,7 +127,7 @@ section {
 }
 
 #progressBar {
-    background: #27ae60;
+    background: #6A0DAD;
     height: 100%;
     width: 0;
     border-radius: 4px;
@@ -132,9 +143,10 @@ section {
 .advisor {
     background: #fff;
     padding: 20px;
-    border-radius: 4px;
+    border-radius: 8px;
     text-align: center;
     width: 200px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
 .advisor img {
@@ -151,7 +163,8 @@ section {
     background: #fff;
     padding: 20px;
     margin-bottom: 20px;
-    border-radius: 4px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
 .thankyou {
@@ -162,7 +175,7 @@ section {
 footer {
     text-align: center;
     padding: 20px;
-    background: #2c3e50;
+    background: linear-gradient(90deg, #6A0DAD, #3498db);
     color: #fff;
     margin-top: 40px;
 }
