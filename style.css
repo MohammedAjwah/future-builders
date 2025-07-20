@@ -8,7 +8,7 @@ body {
 }
 
 .navbar {
-    background: linear-gradient(90deg, #6A0DAD, #3498db);
+    background: linear-gradient(90deg, #6366f1, #4f46e5);
     color: #fff;
     padding: 10px 20px;
     display: flex;
@@ -30,7 +30,7 @@ body {
 }
 
 .hero {
-    background: linear-gradient(135deg, #6A0DAD, #3498db);
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
     color: #fff;
     text-align: center;
     padding: 60px 20px;
@@ -38,7 +38,7 @@ body {
 
 .btn {
     display: inline-block;
-    background: #6A0DAD;
+    background: #6366f1;
     color: #fff;
     padding: 10px 20px;
     margin-top: 10px;
@@ -48,15 +48,15 @@ body {
 }
 
 .btn:hover {
-    background: #4e0889;
+    background: #4f46e5;
 }
 
 .btn.secondary {
-    background: #3498db;
+    background: #4f46e5;
 }
 
 .btn.secondary:hover {
-    background: #2271b3;
+    background: #4338ca;
 }
 
 section {
@@ -68,11 +68,33 @@ section {
     margin-top: 20px;
 }
 
+.features {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+    background: #fff;
+    margin: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    padding: 20px;
+}
+
+.feature {
+    width: 200px;
+    text-align: center;
+}
+
+.illustration {
+    text-align: center;
+}
+
 .plans {
     display: flex;
-    gap: 10px;
+    gap: 20px;
     justify-content: center;
-    margin: 20px 0;
+    flex-wrap: wrap;
+    margin: 20px;
 }
 
 .plan {
@@ -80,18 +102,13 @@ section {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-}
-
-.plans-table {
-    width: 80%;
-    margin: auto;
-    border-collapse: collapse;
-}
-
-.plans-table th, .plans-table td {
-    border: 1px solid #ddd;
-    padding: 8px;
+    width: 220px;
     text-align: center;
+}
+
+.plan .price {
+    font-size: 1.5em;
+    margin: 10px 0;
 }
 
 .auth-container {
@@ -103,15 +120,11 @@ section {
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
-.form input {
+.auth-container input {
     width: 100%;
     padding: 8px;
     margin-bottom: 10px;
     box-sizing: border-box;
-}
-
-.form.hidden {
-    display: none;
 }
 
 .dashboard {
@@ -127,10 +140,31 @@ section {
 }
 
 #progressBar {
-    background: #6A0DAD;
+    background: #6366f1;
     height: 100%;
     width: 0;
     border-radius: 4px;
+}
+
+.tools {
+    list-style: none;
+    padding: 0;
+}
+
+.tools li {
+    margin-bottom: 5px;
+}
+
+.sessions {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.sessions th, .sessions td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
 }
 
 .advisors {
@@ -155,16 +189,20 @@ section {
 }
 
 .podcast-list {
-    width: 80%;
-    margin: auto;
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 20px;
 }
 
 .episode {
     background: #fff;
     padding: 20px;
-    margin-bottom: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    text-align: center;
+    width: 200px;
 }
 
 .thankyou {
@@ -175,7 +213,7 @@ section {
 footer {
     text-align: center;
     padding: 20px;
-    background: linear-gradient(90deg, #6A0DAD, #3498db);
+    background: linear-gradient(90deg, #6366f1, #4f46e5);
     color: #fff;
     margin-top: 40px;
 }

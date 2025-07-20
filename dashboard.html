@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>لوحة التحكم - انطلق</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -12,9 +12,9 @@
     <nav class="navbar">
         <a href="index.html" class="logo">انطلق</a>
         <ul>
-            <li><a href="advisors.html">المستشارون</a></li>
+            <li><a href="pricing.html">الاشتراكات</a></li>
             <li><a href="podcast.html">البودكاست</a></li>
-            <li><a href="index.html" onclick="logout()">تسجيل الخروج</a></li>
+            <li><a href="login.html">تسجيل الدخول</a></li>
         </ul>
     </nav>
 
@@ -25,23 +25,28 @@
             <div id="progressBar"></div>
         </div>
 
-        <h2>الأدوات</h2>
+        <h2>الأدوات المتاحة</h2>
         <ul class="tools">
-            <li>اختيار نيتش</li>
-            <li>وصف منتج</li>
-            <li>خطة محتوى</li>
-            <li>تحليل منافس</li>
+            <li>توليد فكرة منتج</li>
+            <li>كتابة وصف</li>
+            <li>تحليل جمهور</li>
         </ul>
 
-        <h2>طلب خدمة من مستشار</h2>
-        <a href="advisors.html" class="btn secondary">اختر مستشارك</a>
+        <h2>جلساتي مع المستشار</h2>
+        <table class="sessions">
+            <tr><th>التاريخ</th><th>المستشار</th></tr>
+            <tr><td>10 يوليو 2025</td><td>أحمد العلي</td></tr>
+            <tr><td>24 يوليو 2025</td><td>سارة يوسف</td></tr>
+        </table>
+
+        <button onclick="logout()" class="btn secondary">تسجيل الخروج</button>
 
         <h2>تقرير الأداء الشهري</h2>
         <canvas id="chart" width="400" height="200"></canvas>
     </div>
 
     <footer>
-        <p>&copy; 2024 منصة انطلق</p>
+        <p>انطلق &copy; 2025 جميع الحقوق محفوظة</p>
     </footer>
 <script src="app.js"></script>
 </body>
