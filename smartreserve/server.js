@@ -19,16 +19,24 @@ function extractBookingData(transcript) {
   const normalized = text.toLowerCase();
 
   let guestCount = 2;
-  const guestMatch = normalized.match(/\b(\d{1,2})\b/);
+  let guestMatch = normalized.match(/\bfor\s+(\d{1,2})\b/i);
+  if (!guestMatch) {
+    guestMatch = normalized.match(/\b(\d{1,2})\s*(?:guests?|people|persons?)\b/i);
+  }
+  if (!guestMatch) {
+    guestMatch = normalized.match(/\b(\d{1,2})\b/);
+  }
   if (guestMatch) {
     guestCount = Number.parseInt(guestMatch[1], 10);
   }
 
   let bookingTime = "unspecified";
-  const timeMatch = normalized.match(
-    /\b((?:[01]?\d|2[0-3])(?::[0-5]\d)?\s*(?:am|pm)?)\b/i
-  );
-  if (timeMatch) {
+  // Prefer explicit times with am/pm, then values following "at".
+  let timeMatch = normalized.match(/\b((?:[1-9]|1[0-2])(?::[0-5]\d)?\s*(?:am|pm))\b/i);
+  if (!timeMatch) {
+    timeMatch = normalized.match(/\bat\s*((?:[01]?\d|2[0-3])(?::[0-5]\d)?)\b/i);
+  }
+  if (timeMatch && timeMatch[1]) {
     bookingTime = timeMatch[1];
   }
 
