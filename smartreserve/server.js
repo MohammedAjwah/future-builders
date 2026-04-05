@@ -33,11 +33,21 @@ function extractBookingData(transcript) {
   }
 
   let customerName = "Guest";
-  const cleaned = text
-    .replace(/\bfor\b/gi, " ")
-    .replace(/\b(?:at|around)\b/gi, " ")
-    .replace(/\b(?:am|pm)\b/gi, " ")
-    .replace(/\b\d{1,2}(?::\d{2})?\b/g, " ")
+  let cleaned = text;
+
+  // Remove extracted time and guest count from the transcript first,
+  // then strip filler words so the remaining text is mostly the name.
+  if (timeMatch && timeMatch[1]) {
+    cleaned = cleaned.replace(new RegExp(timeMatch[1], "i"), " ");
+  }
+  if (guestMatch && guestMatch[1]) {
+    cleaned = cleaned.replace(new RegExp(`\\b${guestMatch[1]}\\b`, "i"), " ");
+  }
+
+  cleaned = cleaned
+    .replace(/\b(my name is|i am|this is)\b/gi, " ")
+    .replace(/\b(book|booking|reserve|reservation|table|for|at|around|please)\b/gi, " ")
+    .replace(/[^a-zA-Z\s'-]/g, " ")
     .replace(/\s+/g, " ")
     .trim();
 
