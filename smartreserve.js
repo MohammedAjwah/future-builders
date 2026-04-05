@@ -1,4 +1,4 @@
-const WEBHOOK_URL = "https://hook.us2.make.com/mg7pdfdd9p49n2lmabwnmlyowgycjbvs";
+const WEBHOOK_URL = "https://hook.us2.make.com/a1hj1t6y5ldhsoplc1erlo4nr0q7w6oh";
 
 async function createBooking(name, time, guests) {
   const response = await fetch(WEBHOOK_URL, {
