@@ -1,0 +1,22 @@
+{
+  "name": "smartreserve",
+  "version": "1.0.0",
+  "description": "SmartReserve voice booking MVP with Twilio and Express",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "twilio",
+    "voice",
+    "booking",
+    "express"
+  ],
+  "author": "SmartReserve",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^17.4.1",
+    "express": "^5.2.1",
+    "twilio": "^5.13.1"
+  }
+}
