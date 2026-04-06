@@ -1,1 +1,4 @@
 /smartreserve/node_modules/
+/smartreserve/backend/db/*.db
+/smartreserve/frontend/dist/
+/smartreserve/frontend/node_modules/
