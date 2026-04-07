@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import RecordTable from "../components/RecordTable";
 
-export default function Bookings({ apiRequest }) {
+export default function Records({ apiRequest }) {
   const [records, setRecords] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);

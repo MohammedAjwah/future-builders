@@ -1,8 +1,7 @@
 const express = require("express");
 const twilio = require("twilio");
-const { parseBookingTranscript } = require("../services/bookingParser");
-const { processBooking } = require("../services/bookingProcessor");
 const { getRestaurantByPhone } = require("../services/restaurantRouter");
+const { orchestrateVoiceInput } = require("../services/orchestratorService");
 const { error } = require("../utils/logger");
 
 const router = express.Router();
@@ -25,6 +24,7 @@ router.post("/voice", (req, res) => {
 router.post("/gather", async (req, res) => {
   const transcript = req.body.SpeechResult || "";
   const calledNumber = req.body.To || req.body.Called || "";
+  const customerPhone = req.body.From || req.body.Caller || "";
   const twiml = new twilio.twiml.VoiceResponse();
 
   try {
@@ -35,15 +35,19 @@ router.post("/gather", async (req, res) => {
       return res.send(twiml.toString());
     }
 
-    const parsed = parseBookingTranscript(transcript);
-    const result = await processBooking({
+    const result = await orchestrateVoiceInput({
       restaurant,
-      bookingData: parsed,
-      source: "twilio_voice",
+      text: transcript,
+      phoneNumber: customerPhone,
+      sourceSessionId: req.body.CallSid || "",
+      source: "twilio_gather",
     });
 
-    if (result.success) {
-      twiml.say("Your booking is confirmed");
+    if (
+      (result.actionRequired && result.connectorStatus === "sent") ||
+      !result.actionRequired
+    ) {
+      twiml.say(result.ai.response || "Your request is confirmed");
     } else {
       twiml.say("Sorry, something went wrong");
     }

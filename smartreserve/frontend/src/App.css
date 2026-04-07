@@ -40,6 +40,15 @@
   color: #ffffff;
 }
 
+.sidebar-section-title {
+  margin-top: 10px;
+  margin-bottom: 4px;
+  font-size: 11px;
+  color: #93c5fd;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
 .content {
   flex: 1;
   display: flex;
@@ -336,6 +345,12 @@
   border-bottom: 1px solid #e2e8f0;
   vertical-align: top;
   font-size: 14px;
+}
+
+.table-cell-mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
+  font-size: 12px;
 }
 
 .mini-pre {

@@ -6,6 +6,8 @@ import Dashboard from "./pages/Dashboard";
 import Restaurants from "./pages/Restaurants";
 import RestaurantDetails from "./pages/RestaurantDetails";
 import Bookings from "./pages/Bookings";
+import Interactions from "./pages/Interactions";
+import Records from "./pages/Records";
 import Settings from "./pages/Settings";
 import "./App.css";
 
@@ -152,6 +154,8 @@ function App() {
           <Route path="/restaurants/new" element={<RestaurantDetails {...pageProps} />} />
           <Route path="/restaurants/:id" element={<RestaurantDetails {...pageProps} />} />
           <Route path="/bookings" element={<Bookings {...pageProps} />} />
+          <Route path="/interactions" element={<Interactions {...pageProps} />} />
+          <Route path="/records" element={<Records {...pageProps} />} />
           <Route
             path="/settings"
             element={<Settings apiBaseUrl={API_BASE_URL} setGlobalMessage={setGlobalMessage} />}

@@ -15,6 +15,7 @@ const {
   sendBooking: sendSheets,
   testConnection: testSheets,
 } = require("../connectors/sheetsConnector");
+const { sendPayload: sendWebhookPayload } = require("../connectors/webhookConnector");
 
 function normalizeRestaurant(restaurant = {}) {
   return {
@@ -89,8 +90,18 @@ async function getRestaurantByPhone(phoneNumber) {
   return null;
 }
 
+async function getRestaurantById(id) {
+  const row = await get("SELECT * FROM restaurants WHERE id = ?", [id]);
+  if (!row) return null;
+  return mapRestaurantRow(row);
+}
+
 async function routeBookingToConnector(restaurant, payload) {
   const normalized = normalizeRestaurant(restaurant);
+  // If a webhook is configured, it is the primary SmartReserve integration channel.
+  if (normalized.webhookUrl) {
+    return sendWebhookPayload(normalized.webhookUrl, payload);
+  }
   switch (normalized.providerType) {
     case "make":
       return sendMake(normalized, payload);
@@ -107,6 +118,9 @@ async function routeBookingToConnector(restaurant, payload) {
 
 async function sendTestBooking(restaurant, payload) {
   const normalized = normalizeRestaurant(restaurant);
+  if (normalized.webhookUrl) {
+    return sendWebhookPayload(normalized.webhookUrl, payload);
+  }
   switch (normalized.providerType) {
     case "make":
       return testMake(normalized, payload);
@@ -134,6 +148,7 @@ async function testRestaurantConnection(restaurant) {
 const findRestaurantByPhone = getRestaurantByPhone;
 
 module.exports = {
+  getRestaurantById,
   getRestaurantByPhone,
   findRestaurantByPhone,
   routeBookingToConnector,

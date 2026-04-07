@@ -92,7 +92,9 @@ export default function RestaurantDetails({ apiRequest, setGlobalMessage }) {
     <section>
       <div className="page-header">
         <h2>{title}</h2>
-        <p className="muted">Configure provider routing and field mapping.</p>
+        <p className="muted">
+          Configure onboarding details, AI context, webhook/API integration, and SMS behavior.
+        </p>
       </div>
       {error ? <p className="error-text">{error}</p> : null}
       <RestaurantForm

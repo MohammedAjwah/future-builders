@@ -3,6 +3,15 @@ import { useMemo, useState } from "react";
 const EMPTY_FORM = {
   restaurantName: "",
   phoneNumber: "",
+  address: "",
+  workingHours: "{\n  \"mon\": \"09:00-17:00\"\n}",
+  reservationsEnabled: true,
+  ordersEnabled: true,
+  menu: "",
+  faq: "[\"What time do you close?\"]",
+  smsEnabled: true,
+  smsTemplate:
+    "Hi {name}, your {intent} at {restaurant} is confirmed for {time}.",
   providerType: "make",
   webhookUrl: "",
   apiBaseUrl: "",
@@ -34,6 +43,16 @@ export default function RestaurantForm({
     return {
       restaurantName: initialValue.restaurantName || "",
       phoneNumber: initialValue.phoneNumber || "",
+      address: initialValue.address || "",
+      workingHours: stringifyMapping(initialValue.workingHours || {}),
+      reservationsEnabled: Boolean(initialValue.reservationsEnabled),
+      ordersEnabled: Boolean(initialValue.ordersEnabled),
+      menu: initialValue.menu || "",
+      faq: stringifyMapping(initialValue.faq || []),
+      smsEnabled: Boolean(initialValue.smsEnabled),
+      smsTemplate:
+        initialValue.smsTemplate ||
+        "Hi {name}, your {intent} at {restaurant} is confirmed for {time}.",
       providerType: initialValue.providerType || "make",
       webhookUrl: initialValue.webhookUrl || "",
       apiBaseUrl: initialValue.apiBaseUrl || "",
@@ -57,15 +76,21 @@ export default function RestaurantForm({
     setError("");
 
     let parsedMapping = {};
+    let parsedWorkingHours = {};
+    let parsedFaq = [];
     try {
       parsedMapping = JSON.parse(form.fieldMapping || "{}");
+      parsedWorkingHours = JSON.parse(form.workingHours || "{}");
+      parsedFaq = JSON.parse(form.faq || "[]");
     } catch (_err) {
-      setError("Field mapping must be valid JSON");
+      setError("Field mapping, working hours, and FAQ must be valid JSON");
       return;
     }
 
     onSubmit({
       ...form,
+      workingHours: parsedWorkingHours,
+      faq: parsedFaq,
       fieldMapping: parsedMapping,
     });
   }
@@ -91,6 +116,59 @@ export default function RestaurantForm({
           onChange={(e) => updateField("phoneNumber", e.target.value)}
           required
           placeholder="+15551234567"
+        />
+      </label>
+
+      <label>
+        Address
+        <input
+          value={form.address}
+          onChange={(e) => updateField("address", e.target.value)}
+        />
+      </label>
+
+      <label className="full-width">
+        Working Hours (JSON)
+        <textarea
+          rows={3}
+          value={form.workingHours}
+          onChange={(e) => updateField("workingHours", e.target.value)}
+        />
+      </label>
+
+      <label className="checkbox-row">
+        <input
+          type="checkbox"
+          checked={form.reservationsEnabled}
+          onChange={(e) => updateField("reservationsEnabled", e.target.checked)}
+        />
+        Reservations Enabled
+      </label>
+
+      <label className="checkbox-row">
+        <input
+          type="checkbox"
+          checked={form.ordersEnabled}
+          onChange={(e) => updateField("ordersEnabled", e.target.checked)}
+        />
+        Orders Enabled
+      </label>
+
+      <label className="full-width">
+        Menu (text or URL)
+        <input
+          value={form.menu}
+          onChange={(e) => updateField("menu", e.target.value)}
+          placeholder="https://restaurant.com/menu or plain text"
+        />
+      </label>
+
+      <label className="full-width">
+        FAQ (JSON array)
+        <textarea
+          rows={4}
+          value={form.faq}
+          onChange={(e) => updateField("faq", e.target.value)}
         />
       </label>
 
@@ -157,6 +235,24 @@ export default function RestaurantForm({
           rows={8}
           value={form.fieldMapping}
           onChange={(e) => updateField("fieldMapping", e.target.value)}
+        />
+      </label>
+
+      <label className="checkbox-row">
+        <input
+          type="checkbox"
+          checked={form.smsEnabled}
+          onChange={(e) => updateField("smsEnabled", e.target.checked)}
+        />
+        SMS Enabled
+      </label>
+
+      <label className="full-width">
+        SMS Template
+        <textarea
+          rows={2}
+          value={form.smsTemplate}
+          onChange={(e) => updateField("smsTemplate", e.target.value)}
         />
       </label>
 

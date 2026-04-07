@@ -4,7 +4,9 @@ const sqlite3 = require("sqlite3").verbose();
 const bcrypt = require("bcryptjs");
 const { info, error } = require("../utils/logger");
 
-const DB_PATH = path.join(__dirname, "smartreserve.db");
+const DB_PATH = process.env.DATABASE_PATH
+  ? path.resolve(process.cwd(), process.env.DATABASE_PATH)
+  : path.join(__dirname, "smartreserve.db");
 const SCHEMA_PATH = path.join(__dirname, "schema.sql");
 
 const db = new sqlite3.Database(DB_PATH);

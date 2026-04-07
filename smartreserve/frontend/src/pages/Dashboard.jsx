@@ -3,8 +3,9 @@ import { useEffect, useState } from "react";
 export default function Dashboard({ apiRequest }) {
   const [stats, setStats] = useState({
     restaurants: 0,
-    bookings: 0,
-    recent: [],
+    interactions: 0,
+    records: 0,
+    recentInteractions: [],
   });
   const [error, setError] = useState("");
 
@@ -13,15 +14,17 @@ export default function Dashboard({ apiRequest }) {
     async function load() {
       try {
         setError("");
-        const [restaurants, bookings] = await Promise.all([
+        const [restaurants, interactions, records] = await Promise.all([
           apiRequest("/api/restaurants"),
-          apiRequest("/api/bookings"),
+          apiRequest("/api/interactions"),
+          apiRequest("/api/records"),
         ]);
         if (!mounted) return;
         setStats({
           restaurants: restaurants.length,
-          bookings: bookings.length,
-          recent: bookings.slice(0, 8),
+          interactions: interactions.length,
+          records: records.length,
+          recentInteractions: interactions.slice(0, 8),
         });
       } catch (err) {
         if (!mounted) return;
@@ -47,20 +50,25 @@ export default function Dashboard({ apiRequest }) {
           <p>{stats.restaurants}</p>
         </article>
         <article className="stat-card">
-          <h3>Total Bookings</h3>
-          <p>{stats.bookings}</p>
+          <h3>Total Interactions</h3>
+          <p>{stats.interactions}</p>
+        </article>
+        <article className="stat-card">
+          <h3>Total Records</h3>
+          <p>{stats.records}</p>
         </article>
       </div>
       <div className="card">
-        <h3>Recent Booking Activity</h3>
-        {stats.recent.length === 0 ? (
-          <p className="muted">No booking activity yet.</p>
+        <h3>Recent Interaction Activity</h3>
+        {stats.recentInteractions.length === 0 ? (
+          <p className="muted">No interaction activity yet.</p>
         ) : (
           <ul className="list">
-            {stats.recent.map((booking) => (
-              <li key={booking.id}>
-                <strong>#{booking.id}</strong> {booking.restaurantName} -{" "}
-                {booking.customerName} - {booking.bookingTime} - {booking.guestCount} guests
+            {stats.recentInteractions.map((interaction) => (
+              <li key={interaction.id}>
+                <strong>#{interaction.id}</strong> {interaction.restaurantName} -{" "}
+                {interaction.aiIntent || "unknown"} - {interaction.connectorStatus} -{" "}
+                {interaction.smsStatus}
               </li>
             ))}
           </ul>

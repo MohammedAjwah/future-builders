@@ -107,6 +107,11 @@ export default function Restaurants({ apiRequest, setGlobalMessage }) {
                 </td>
               </tr>
             ))}
+            {restaurants.length === 0 ? (
+              <tr>
+                <td colSpan="5">No restaurants added yet.</td>
+              </tr>
+            ) : null}
           </tbody>
         </table>
       </div>
